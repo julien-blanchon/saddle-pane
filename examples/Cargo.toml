@@ -1,0 +1,22 @@
+[workspace]
+members = [
+    "common",
+    "basic",
+    "bouncing-balls",
+    "game-debug",
+    "lab",
+]
+resolver = "3"
+
+[workspace.dependencies]
+bevy = { version = "0.18", features = ["serialize"] }
+bevy_flair = "0.7"
+bevy_input_focus = "0.18"
+bevy_ui_widgets = "0.18"
+bevy_enhanced_input = "0.24"
+saddle-pane = { path = ".." }
+
+[workspace.lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"
+nonstandard_macro_braces = "warn"

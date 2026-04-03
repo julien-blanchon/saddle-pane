@@ -1,0 +1,121 @@
+/* Monitor controls — read-only value, log, graph */
+
+/* ── Read-only value monitor ── */
+
+.pane-row-monitor {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+.pane-monitor-value {
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0px 4px;
+    background-color: var(--pane-widget-bg-muted);
+    border-radius: 2px;
+}
+
+.pane-monitor-value-text {
+    color: var(--pane-text-monitor);
+    font-size: 10px;
+}
+
+/* ── Multiline log monitor ── */
+
+.pane-row-log {
+    display: flex;
+    flex-direction: column;
+    min-height: 28px;
+    min-width: 0px;
+    padding: 4px 8px;
+    row-gap: 2px;
+    overflow: clip;
+}
+
+.pane-log-header {
+    display: flex;
+    height: 16px;
+    min-height: 16px;
+    align-items: center;
+}
+
+.pane-log-area {
+    display: flex;
+    flex-direction: column;
+    min-width: 0px;
+    min-height: 40px;
+    max-height: 80px;
+    padding: 4px;
+    background-color: var(--pane-bg-dark);
+    border-radius: 2px;
+    overflow-y: scroll;
+    overflow-x: clip;
+}
+
+.pane-log-text {
+    color: var(--pane-text-log);
+    font-size: 9px;
+}
+
+/* ── Graph monitor ── */
+
+.pane-row-graph {
+    display: flex;
+    flex-direction: column;
+    min-height: 28px;
+    min-width: 0px;
+    padding: 4px 8px;
+    row-gap: 2px;
+    overflow: clip;
+}
+
+.pane-graph-header {
+    display: flex;
+    height: 16px;
+    min-height: 16px;
+    align-items: center;
+    column-gap: 6px;
+}
+
+.pane-graph-value-text {
+    color: var(--pane-text-primary);
+    font-size: 10px;
+}
+
+.pane-graph-area {
+    display: flex;
+    flex-direction: row;
+    min-width: 0px;
+    height: 40px;
+    min-height: 40px;
+    align-items: flex-end;
+    background-color: var(--pane-bg-dark);
+    border-radius: 2px;
+    padding: 2px;
+    column-gap: 1px;
+}
+
+.pane-graph-bar {
+    flex-grow: 1;
+    min-width: 0px;
+    background-color: var(--pane-accent-fill);
+    border-radius: 1px;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+

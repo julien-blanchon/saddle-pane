@@ -1,0 +1,15 @@
+[package]
+name = "bevy_iconify_image"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "SVG-to-Image rasterization for Bevy — render bevy_iconify icons as ImageNode"
+
+[dependencies]
+bevy = "0.18"
+usvg = "0.46"
+tiny-skia = "0.11"
+
+[lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"

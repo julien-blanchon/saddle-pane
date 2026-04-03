@@ -1,0 +1,60 @@
+/* Text input */
+
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+.pane-text-input {
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    padding: 0px 4px;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-text-input:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-text-input:active {
+    background-color: var(--pane-widget-focus);
+}
+
+.pane-text-input:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-text-input.is-focused {
+    background-color: var(--pane-widget-focus);
+    border-color: var(--pane-text-muted);
+}
+
+.pane-text-value {
+    color: var(--pane-text-primary);
+    font-size: 11px;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+

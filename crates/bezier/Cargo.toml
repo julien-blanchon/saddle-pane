@@ -1,0 +1,16 @@
+[package]
+name = "saddle-pane-bezier"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Cubic bezier curve editor plugin for saddle-pane"
+
+[dependencies]
+bevy = "0.18"
+bevy_flair = "0.7"
+bevy_ui_widgets = "0.18"
+saddle-pane = { path = "../.." }
+
+[lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"

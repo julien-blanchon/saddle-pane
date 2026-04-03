@@ -1,0 +1,169 @@
+.pane-row {
+    display: flex;
+    height: auto;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: visible;
+}
+
+.pane-label-text {
+    color: #78797f;
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+
+.pane-vec2-area {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    column-gap: 4px;
+}
+
+/* Joystick trigger button */
+.pane-vec2-joystick-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    border-width: 0px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 120ms;
+}
+
+.pane-vec2-joystick-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.pane-vec2-joystick-btn.is-active {
+    background-color: rgba(74, 111, 165, 0.30);
+}
+
+.pane-vec2-joystick-icon {
+    color: #7aacdf;
+    font-size: 14px;
+}
+
+/* Number fields area */
+.pane-vec2-fields {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    column-gap: 3px;
+    align-items: center;
+}
+
+.pane-vec2-field-group {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    column-gap: 2px;
+}
+
+.pane-vec2-field-label {
+    color: #5a5b60;
+    font-size: 10px;
+}
+
+.pane-vec2-field-value {
+    display: flex;
+    flex-grow: 1;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    padding: 0px 4px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+}
+
+.pane-vec2-field-text {
+    color: #b0b2b8;
+    font-size: 10px;
+}
+
+/* Joystick popup pad */
+.pane-vec2-pad-popup {
+    display: none;
+    position: absolute;
+    top: -130px;
+    left: -40px;
+    width: 140px;
+    height: 140px;
+    background-color: rgba(30, 31, 36, 0.97);
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
+    padding: 4px;
+    overflow: clip;
+}
+
+.pane-vec2-pad-popup.is-open {
+    display: flex;
+}
+
+.pane-vec2-pad {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Cross-hairs */
+.pane-vec2-pad-hline {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    left: 0px;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.pane-vec2-pad-vline {
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    top: 0px;
+    left: 50%;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Dot indicator */
+.pane-vec2-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #7aacdf;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+    top: 50%;
+    left: 50%;
+    transition-property: background-color;
+    transition-duration: 80ms;
+}
+
+.pane-vec2-dot:hover {
+    background-color: #9ac2ee;
+}

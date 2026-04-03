@@ -1,0 +1,43 @@
+[package]
+name = "saddle-pane"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Lightweight debug & tweaking panel for Bevy — drop-in sliders, toggles, color pickers and more, built entirely on Bevy UI"
+repository = "https://github.com/julien-blanchon/saddle-pane"
+license = "MIT-0"
+
+[workspace]
+members = [
+    "crates/derive",
+    "crates/interval",
+    "crates/vector2",
+    "crates/button-grid",
+    "crates/radio-grid",
+    "crates/bezier",
+    "crates/file",
+    "crates/bevy_iconify",
+    "crates/bevy_iconify_image",
+]
+exclude = ["examples"]
+
+[features]
+default = ["derive"]
+derive = ["dep:saddle-pane-derive"]
+serialize = ["dep:serde", "dep:serde_json"]
+
+[dependencies]
+bevy = "0.18"
+bevy_flair = "0.7"
+bevy_input_focus = "0.18"
+bevy_ui_widgets = "0.18"
+bevy_iconify = { path = "crates/bevy_iconify" }
+bevy_iconify_image = { path = "crates/bevy_iconify_image" }
+saddle-pane-derive = { path = "crates/derive", optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+
+[lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"
+nonstandard_macro_braces = "warn"

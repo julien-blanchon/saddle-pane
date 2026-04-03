@@ -1,0 +1,278 @@
+/* saddle-pane — Tweakpane-inspired design tokens + pane shell */
+
+:root {
+    /* ── Surface colors (hsl 230, 7%, X% palette) ── */
+    --pane-elevation-1: #28292e;       /* Panel bg ~hsl(230,7%,17%) */
+    --pane-elevation-2: #222327;       /* Title bar, folder headers */
+    --pane-elevation-3: rgba(187, 188, 196, 0.10);  /* Widget bg */
+
+    /* ── Border colors ── */
+    --pane-border: #3c3d44;
+    --pane-border-focus: #7090b0;
+    --pane-border-subtle: #333438;
+
+    /* ── Text colors ── */
+    --pane-text-primary: #bbbcc4;      /* ~hsl(230,7%,75%) */
+    --pane-text-secondary: #78797f;    /* Labels — dimmer for contrast */
+    --pane-text-muted: #5c5d64;
+    --pane-text-on-accent: #ffffff;
+
+    /* ── Accent colors ── */
+    --pane-accent: #4a6fa5;
+    --pane-accent-hover: #5a8fd5;
+    --pane-accent-active: #3a5f95;
+    --pane-accent-subtle: rgba(74, 111, 165, 0.15);
+
+    /* ── Widget background states ── */
+    --pane-widget-bg: rgba(187, 188, 196, 0.10);
+    --pane-widget-hover: rgba(187, 188, 196, 0.15);
+    --pane-widget-focus: rgba(187, 188, 196, 0.20);
+    --pane-widget-active: rgba(187, 188, 196, 0.25);
+
+    /* ── Interactive states ── */
+    --pane-hover-bg: rgba(255, 255, 255, 0.03);
+    --pane-active-bg: rgba(255, 255, 255, 0.05);
+
+    /* ── Popup backgrounds ── */
+    --pane-popup-bg: #1e1f24;
+    --pane-bg-dark: rgba(0, 0, 0, 0.25);
+    --pane-widget-bg-muted: rgba(187, 188, 196, 0.06);
+    --pane-tab-hover-bg: rgba(187, 188, 196, 0.06);
+
+    /* ── Accent fill variants ── */
+    --pane-accent-fill: rgba(74, 111, 165, 0.60);
+    --pane-accent-fill-hover: rgba(90, 143, 213, 0.70);
+    --pane-accent-fill-active: rgba(90, 143, 213, 0.80);
+    --pane-accent-checked: rgba(74, 111, 165, 0.25);
+    --pane-accent-checked-hover: rgba(74, 111, 165, 0.35);
+    --pane-accent-indicator: rgba(74, 111, 165, 0.80);
+    --pane-accent-knob: #7aacdf;
+
+    /* ── Text variants ── */
+    --pane-text-brighter: #d0d1d8;
+    --pane-text-monitor: #9a9ba2;
+    --pane-text-log: #8a8b92;
+
+    /* ── Slider dynamic vars ── */
+    --slider-fill-width: 0%;
+    --slider-thumb-left: 0%;
+
+    /* ── Color swatch dynamic var ── */
+    --swatch-color: rgb(255, 255, 255);
+}
+
+/* ══ Pane shell ══ */
+
+.pane {
+    display: flex;
+    flex-direction: column;
+    width: 256px;
+    min-width: 0px;
+    background-color: var(--pane-elevation-1);
+    border-width: 1px;
+    border-color: var(--pane-border);
+    border-radius: 6px;
+    overflow: clip;
+}
+
+/* ── Header (drag handle + divider + title bar) ── */
+
+.pane-header {
+    display: flex;
+    flex-direction: row;
+    height: 24px;
+    min-height: 24px;
+    min-width: 0px;
+    align-items: center;
+    background-color: var(--pane-elevation-2);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--pane-border);
+    border-radius: 6px 6px 0px 0px;
+    overflow: clip;
+}
+
+/* Drag handle — grip icon area in the title bar (subtle, non-interactive look) */
+.pane-drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 24px;
+    min-width: 16px;
+    flex-shrink: 0;
+}
+
+/* Vertical divider between drag handle and title */
+.pane-header-divider {
+    width: 1px;
+    min-width: 1px;
+    height: 14px;
+    flex-shrink: 0;
+    background-color: var(--pane-border);
+}
+
+/* ── Title bar (collapse area) ── */
+
+.pane-title {
+    display: flex;
+    flex-grow: 1;
+    height: 24px;
+    min-height: 24px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 4px;
+    overflow: clip;
+}
+
+/* Collapse arrow — CSS border triangle, rotated for open/collapsed */
+.pane-collapse-icon {
+    width: 6px;
+    height: 6px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-bottom-color: var(--pane-text-muted);
+    border-right-color: var(--pane-text-muted);
+    border-top-color: transparent;
+    border-left-color: transparent;
+    flex-shrink: 0;
+    rotate: 45deg;
+    transition-property: rotate;
+    transition-duration: 0.15s;
+}
+
+.pane.is-collapsed .pane-collapse-icon {
+    rotate: -45deg;
+}
+
+.pane-title-text {
+    flex-grow: 1;
+    min-width: 0px;
+    color: var(--pane-text-primary);
+    font-size: 11px;
+}
+
+/* Resize handle — thin right-edge strip for width dragging */
+.pane-resize-handle {
+    background-color: transparent;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+}
+
+.pane-resize-handle:hover {
+    background-color: var(--pane-accent-subtle);
+}
+
+/* Search bar */
+.pane-search-bar {
+    display: flex;
+    height: 24px;
+    min-height: 24px;
+    align-items: center;
+    padding: 2px 8px;
+    background-color: var(--pane-elevation-2);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--pane-border-subtle);
+}
+
+.pane-search-input {
+    flex-grow: 1;
+    min-width: 0px;
+    color: var(--pane-text-primary);
+    font-size: 10px;
+}
+
+/* Hidden state (for search filter) */
+.pane-row.is-hidden {
+    display: none;
+}
+
+.pane-folder.is-hidden {
+    display: none;
+}
+
+/* ── Body frame (viewport + scrollbar row) ── */
+
+.pane-body-frame {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    min-height: 0px;
+    max-height: 480px;
+}
+
+.pane.is-collapsed .pane-body-frame {
+    display: none;
+}
+
+/* ── Body (scroll viewport) ── */
+
+.pane-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0px;
+    min-height: 0px;
+    padding: 2px 0px;
+    row-gap: 0px;
+}
+
+/* ══ Control rows ══ */
+
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    background-color: transparent;
+    overflow: clip;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-row:hover {
+    background-color: var(--pane-hover-bg);
+}
+
+/* ── Label (Node wrapper — ensures fixed width) ── */
+
+.pane-label {
+    width: 40%;
+    min-width: 0px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    padding: 0px 4px;
+    overflow: clip;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+
+/* ── Footer ── */
+
+.pane-footer {
+    display: flex;
+    flex-direction: row;
+    min-height: 28px;
+    align-items: center;
+    padding: 4px 8px;
+    column-gap: 4px;
+    border-top-width: 1px;
+    border-top-color: var(--pane-border-subtle);
+    background-color: var(--pane-elevation-2);
+}
+
+.pane.is-collapsed .pane-footer {
+    display: none;
+}

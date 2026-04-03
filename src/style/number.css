@@ -1,0 +1,97 @@
+/* Number input — value with optional +/- step buttons */
+
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+/* Step buttons (- and +) */
+.pane-number-step {
+    display: flex;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-number-step:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-number-step:active {
+    background-color: var(--pane-widget-active);
+}
+
+.pane-number-step:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-number-step-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+}
+
+/* Value field */
+.pane-number {
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0px 4px;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-number:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-number:active {
+    background-color: var(--pane-widget-focus);
+}
+
+.pane-number:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-number.is-focused {
+    background-color: var(--pane-widget-focus);
+    border-color: var(--pane-text-muted);
+}
+
+.pane-number-value {
+    color: var(--pane-text-primary);
+    font-size: 11px;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+

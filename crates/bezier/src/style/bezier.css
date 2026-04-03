@@ -1,0 +1,128 @@
+.pane-row {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 28px;
+    min-width: 0px;
+    padding: 4px 8px;
+    row-gap: 4px;
+    overflow: clip;
+}
+
+.pane-label-text {
+    color: #78797f;
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+
+/* Header row: label + preset dropdown */
+.pane-bezier-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 6px;
+    height: 24px;
+}
+
+.pane-bezier-preset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 0px 8px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 120ms;
+}
+
+.pane-bezier-preset-btn:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.pane-bezier-preset-text {
+    color: #b0b2b8;
+    font-size: 10px;
+}
+
+/* Canvas area — contains the texture + overlay CP handles */
+.pane-bezier-canvas {
+    display: flex;
+    width: 100%;
+    height: 160px;
+    min-height: 160px;
+    background-color: rgba(0, 0, 0, 0.20);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.06);
+    overflow: clip;
+}
+
+/* Draggable control point — overlaid on top of texture */
+.pane-bezier-cp {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    background-color: #4a6fa5;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.35);
+    transition-property: background-color;
+    transition-duration: 80ms;
+}
+
+.pane-bezier-cp:hover {
+    background-color: #6088be;
+}
+
+.pane-bezier-cp:active {
+    background-color: #7aacdf;
+}
+
+/* Coordinate fields row */
+.pane-bezier-fields {
+    display: flex;
+    flex-direction: row;
+    column-gap: 4px;
+    align-items: center;
+}
+
+.pane-bezier-field-group {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    column-gap: 2px;
+}
+
+.pane-bezier-field-label {
+    color: #5a5b60;
+    font-size: 9px;
+}
+
+.pane-bezier-field-value {
+    display: flex;
+    flex-grow: 1;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    padding: 0px 3px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+}
+
+.pane-bezier-field-text {
+    color: #b0b2b8;
+    font-size: 9px;
+}

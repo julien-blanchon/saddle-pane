@@ -1,0 +1,90 @@
+/* Tab group — horizontal tab bar + switchable content pages */
+
+/* Tab container */
+.pane-tab-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0px;
+}
+
+/* Tab bar — horizontal row of tab buttons, scrollable */
+.pane-tab-bar {
+    display: flex;
+    flex-direction: row;
+    min-width: 0px;
+    height: 24px;
+    min-height: 24px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--pane-border);
+    padding: 0px 4px;
+    column-gap: 0px;
+    overflow-x: scroll;
+    overflow-y: clip;
+}
+
+/* Individual tab button — flex-shrink: 0 so bar scrolls instead of squishing */
+.pane-tab-button {
+    display: flex;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px;
+    flex-shrink: 0;
+    background-color: transparent;
+    border-bottom-width: 2px;
+    border-bottom-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color, border-bottom-color;
+    transition-duration: 0.08s;
+}
+
+.pane-tab-button:hover {
+    background-color: var(--pane-tab-hover-bg);
+}
+
+.pane-tab-button:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-tab-button.is-active {
+    border-bottom-color: var(--pane-accent-indicator);
+}
+
+.pane-tab-button-text {
+    color: var(--pane-text-secondary);
+    font-size: 10px;
+}
+
+.pane-tab-button.is-active .pane-tab-button-text {
+    color: var(--pane-text-primary);
+}
+
+/* Tab content pages */
+.pane-tab-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0px;
+    min-height: 0px;
+}
+
+.pane-tab-page {
+    display: none;
+    flex-direction: column;
+    min-width: 0px;
+    min-height: 0px;
+}
+
+.pane-tab-page.is-active {
+    display: flex;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+

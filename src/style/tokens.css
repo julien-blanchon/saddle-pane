@@ -1,0 +1,64 @@
+/* saddle-pane design tokens — reference copy.
+   The canonical :root block lives in pane.css which is loaded on PaneRoot.
+   This file is embedded for theme overrides but not directly loaded. */
+
+:root {
+    /* ── Surface colors (hsl 230, 7%, X% palette) ── */
+    --pane-elevation-1: #28292e;
+    --pane-elevation-2: #222327;
+    --pane-elevation-3: rgba(187, 188, 196, 0.10);
+
+    /* ── Border colors ── */
+    --pane-border: #3c3d44;
+    --pane-border-focus: #7090b0;
+    --pane-border-subtle: #333438;
+
+    /* ── Text colors ── */
+    --pane-text-primary: #bbbcc4;
+    --pane-text-secondary: #78797f;
+    --pane-text-muted: #5c5d64;
+    --pane-text-on-accent: #ffffff;
+
+    /* ── Accent colors ── */
+    --pane-accent: #4a6fa5;
+    --pane-accent-hover: #5a8fd5;
+    --pane-accent-active: #3a5f95;
+    --pane-accent-subtle: rgba(74, 111, 165, 0.15);
+
+    /* ── Widget background states ── */
+    --pane-widget-bg: rgba(187, 188, 196, 0.10);
+    --pane-widget-hover: rgba(187, 188, 196, 0.15);
+    --pane-widget-focus: rgba(187, 188, 196, 0.20);
+    --pane-widget-active: rgba(187, 188, 196, 0.25);
+
+    /* ── Interactive states ── */
+    --pane-hover-bg: rgba(255, 255, 255, 0.03);
+    --pane-active-bg: rgba(255, 255, 255, 0.05);
+
+    /* ── Popup backgrounds ── */
+    --pane-popup-bg: #1e1f24;
+    --pane-bg-dark: rgba(0, 0, 0, 0.25);
+    --pane-widget-bg-muted: rgba(187, 188, 196, 0.06);
+    --pane-tab-hover-bg: rgba(187, 188, 196, 0.06);
+
+    /* ── Accent fill variants ── */
+    --pane-accent-fill: rgba(74, 111, 165, 0.60);
+    --pane-accent-fill-hover: rgba(90, 143, 213, 0.70);
+    --pane-accent-fill-active: rgba(90, 143, 213, 0.80);
+    --pane-accent-checked: rgba(74, 111, 165, 0.25);
+    --pane-accent-checked-hover: rgba(74, 111, 165, 0.35);
+    --pane-accent-indicator: rgba(74, 111, 165, 0.80);
+    --pane-accent-knob: #7aacdf;
+
+    /* ── Text variants ── */
+    --pane-text-brighter: #d0d1d8;
+    --pane-text-monitor: #9a9ba2;
+    --pane-text-log: #8a8b92;
+
+    /* ── Slider dynamic vars ── */
+    --slider-fill-width: 0%;
+    --slider-thumb-left: 0%;
+
+    /* ── Color swatch dynamic var ── */
+    --swatch-color: rgb(255, 255, 255);
+}

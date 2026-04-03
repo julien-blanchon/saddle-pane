@@ -1,0 +1,124 @@
+/* Select/Dropdown */
+
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    /* NO overflow: clip — popup must be visible outside row */
+}
+
+/* Wrapper: contains trigger + popup, position: relative for popup alignment */
+.pane-select-wrapper {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    min-width: 0px;
+}
+
+.pane-select-trigger {
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 4px;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    column-gap: 4px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-select-trigger:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-select-trigger:active {
+    background-color: var(--pane-widget-active);
+}
+
+.pane-select-trigger:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-select-label {
+    flex-grow: 1;
+    min-width: 0px;
+    color: var(--pane-text-primary);
+    font-size: 11px;
+    overflow: clip;
+}
+
+.pane-select-arrow {
+    width: 0px;
+    height: 0px;
+    border-top-width: 4px;
+    border-top-color: var(--pane-text-muted);
+    border-left-width: 3px;
+    border-left-color: transparent;
+    border-right-width: 3px;
+    border-right-color: transparent;
+}
+
+/* Popup — absolute inside wrapper, matches trigger width */
+.pane-select-popup {
+    position: absolute;
+    top: 22px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--pane-popup-bg);
+    border-width: 1px;
+    border-color: var(--pane-border);
+    border-radius: 2px;
+    padding: 2px;
+    row-gap: 1px;
+}
+
+/* Items */
+.pane-select-item {
+    display: flex;
+    height: 22px;
+    min-height: 22px;
+    align-items: center;
+    padding: 0px 6px;
+    border-radius: 2px;
+    color: var(--pane-text-primary);
+    font-size: 11px;
+    background-color: transparent;
+    transition-property: background-color, color;
+    transition-duration: 0.04s;
+}
+
+.pane-select-item:hover {
+    background-color: var(--pane-widget-bg);
+    color: var(--pane-text-brighter);
+}
+
+.pane-select-item:active {
+    background-color: var(--pane-widget-focus);
+    color: var(--pane-text-on-accent);
+}
+
+.pane-select-item:focus-visible {
+    background-color: var(--pane-widget-bg);
+    color: var(--pane-text-brighter);
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+

@@ -1,0 +1,148 @@
+/* Slider: accent-filled track with round knob + compact value box */
+
+:root {
+    --slider-fill-width: 0%;
+    --slider-thumb-left: 0%;
+}
+
+/* Row layout */
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+/* Slider area — holds track + value */
+.pane-slider {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    column-gap: 6px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+}
+
+.pane-slider:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+/* Track — rounded bar, relative positioned for absolute children */
+.pane-slider-track {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 20px;
+    height: 6px;
+    align-items: center;
+    background-color: var(--pane-widget-hover);
+    border-radius: 3px;
+    transition-property: background-color;
+    transition-duration: 0.08s;
+}
+
+.pane-slider-track:hover {
+    background-color: var(--pane-widget-focus);
+}
+
+/* Filled portion — accent colored */
+.pane-slider-fill {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: var(--pane-accent-fill);
+    border-radius: 3px;
+    width: var(--slider-fill-width);
+    transition-property: background-color;
+    transition-duration: 0.08s;
+}
+
+.pane-slider-track:hover .pane-slider-fill {
+    background-color: var(--pane-accent-fill-hover);
+}
+
+.pane-slider-track:active .pane-slider-fill {
+    background-color: var(--pane-accent-fill-active);
+}
+
+/* Knob — round, centered on track line */
+.pane-slider-thumb {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: var(--pane-text-primary);
+    border-radius: 7px;
+    left: var(--slider-thumb-left);
+    top: 50%;
+    translate: -50% -50%;
+    scale: 1;
+    transition-property: scale, background-color;
+    transition-duration: 0.1s;
+}
+
+.pane-slider-track:hover .pane-slider-thumb {
+    background-color: var(--pane-text-brighter);
+    scale: 1.05;
+}
+
+.pane-slider-track:active .pane-slider-thumb {
+    scale: 1.15;
+    background-color: var(--pane-text-on-accent);
+}
+
+/* Value display box — compact fixed width */
+.pane-slider-value {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 46px;
+    min-width: 46px;
+    height: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0px 3px;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-slider-value:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-slider-value:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-slider-value.is-focused {
+    background-color: var(--pane-widget-focus);
+}
+
+.pane-slider-value-text {
+    color: var(--pane-text-primary);
+    font-size: 10px;
+}
+
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}

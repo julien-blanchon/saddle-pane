@@ -1,0 +1,32 @@
+[package]
+name = "bevy_iconify"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Compile-time Iconify SVG icons for Bevy — embed 200k+ icons from iconify.design at build time"
+
+[lib]
+proc-macro = true
+doctest = false
+
+[features]
+default = ["cache", "tls"]
+tls = ["ureq/tls"]
+cache = ["blake3"]
+offline = ["blake3"]
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }
+ureq = { version = "2", default-features = false }
+url = "2"
+blake3 = { version = "1", optional = true }
+hex = "0.4"
+fst = { version = "0.4", features = ["levenshtein"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"

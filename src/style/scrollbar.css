@@ -1,0 +1,26 @@
+/* Scrollbar for pane body */
+
+.pane-scrollbar {
+    position: absolute;
+    right: 1px;
+    top: 0px;
+    bottom: 0px;
+    width: 4px;
+    background-color: transparent;
+}
+
+.pane-scrollbar-thumb {
+    background-color: var(--pane-border);
+    border-radius: 2px;
+    min-height: 16px;
+    transition-property: background-color;
+    transition-duration: 0.1s;
+}
+
+.pane-scrollbar-thumb:hover {
+    background-color: var(--pane-text-muted);
+}
+
+.pane-scrollbar-thumb:active {
+    background-color: var(--pane-text-secondary);
+}

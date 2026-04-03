@@ -1,0 +1,48 @@
+.pane-label-text {
+    color: #78797f;
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+
+.pane-button-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    column-gap: 3px;
+    row-gap: 3px;
+    padding: 2px 0px 2px 0px;
+}
+
+.pane-button-grid-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    min-width: 40px;
+    flex-grow: 1;
+    padding: 0px 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 120ms;
+}
+
+.pane-button-grid-item:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.pane-button-grid-item:active {
+    background-color: rgba(74, 111, 165, 0.30);
+}
+
+.pane-button-grid-item-text {
+    color: #b0b2b8;
+    font-size: 10px;
+}

@@ -1,0 +1,41 @@
+/* Button: action button */
+
+.pane-row-button {
+    padding: 4px 8px;
+    height: 32px;
+    min-height: 32px;
+}
+
+.pane-button {
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 0.06s;
+}
+
+.pane-button:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-button:active {
+    background-color: var(--pane-widget-active);
+}
+
+.pane-button:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-button-text {
+    color: var(--pane-text-primary);
+    font-size: 11px;
+}

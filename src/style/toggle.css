@@ -1,0 +1,72 @@
+/* Toggle: checkbox with visible/hidden mark */
+
+/* Row layout */
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+/* Checkbox box */
+.pane-toggle {
+    display: flex;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pane-widget-bg);
+    border-radius: 2px;
+    transition-property: background-color;
+    transition-duration: 0.08s;
+}
+
+.pane-toggle {
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+}
+
+.pane-toggle:hover {
+    background-color: var(--pane-widget-hover);
+}
+
+.pane-toggle:focus-visible {
+    outline: 1px var(--pane-border-focus);
+    outline-offset: 0px;
+}
+
+.pane-toggle:checked {
+    background-color: var(--pane-accent-checked);
+}
+
+.pane-toggle:checked:hover {
+    background-color: var(--pane-accent-checked-hover);
+}
+
+/* Checkmark — simple square, hidden by default, shown on :checked */
+.pane-toggle-knob {
+    width: 10px;
+    height: 10px;
+    background-color: var(--pane-text-primary);
+    border-radius: 1px;
+    display: none;
+}
+
+.pane-toggle:checked .pane-toggle-knob {
+    display: flex;
+    background-color: var(--pane-accent-knob);
+}
+
+/* Label styling */
+.pane-label-text {
+    color: var(--pane-text-secondary);
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}

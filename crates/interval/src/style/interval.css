@@ -1,0 +1,133 @@
+/* Interval: dual-thumb range slider */
+
+:root {
+    --interval-min-pos: 0%;
+    --interval-max-pos: 100%;
+    --interval-fill-left: 0%;
+    --interval-fill-width: 100%;
+}
+
+.pane-row {
+    display: flex;
+    height: 28px;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+/* Interval area — holds min text + track + max text */
+.pane-interval {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0px;
+    height: 20px;
+    align-items: center;
+    column-gap: 4px;
+}
+
+/* Min/max value text boxes */
+.pane-interval-value {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 36px;
+    min-width: 36px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 2px;
+    background-color: rgba(187, 188, 196, 0.10);
+    border-radius: 2px;
+}
+
+.pane-interval-value-text {
+    color: #9a9ba2;
+    font-size: 9px;
+}
+
+/* Track */
+.pane-interval-track {
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 20px;
+    height: 6px;
+    align-items: center;
+    background-color: rgba(187, 188, 196, 0.15);
+    border-radius: 3px;
+}
+
+/* Fill between thumbs */
+.pane-interval-fill {
+    position: absolute;
+    left: var(--interval-fill-left);
+    top: 0px;
+    bottom: 0px;
+    width: var(--interval-fill-width);
+    background-color: rgba(74, 111, 165, 0.60);
+    border-radius: 3px;
+}
+
+/* Min thumb */
+.pane-interval-thumb-min {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #bbbcc4;
+    border-radius: 6px;
+    left: var(--interval-min-pos);
+    top: 50%;
+    translate: -50% -50%;
+    scale: 1;
+    transition-property: scale, background-color;
+    transition-duration: 0.1s;
+}
+
+.pane-interval-thumb-min:hover {
+    background-color: #d0d1d8;
+    scale: 1.1;
+}
+
+.pane-interval-thumb-min:active {
+    scale: 1.2;
+    background-color: #ffffff;
+}
+
+/* Max thumb */
+.pane-interval-thumb-max {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #bbbcc4;
+    border-radius: 6px;
+    left: var(--interval-max-pos);
+    top: 50%;
+    translate: -50% -50%;
+    scale: 1;
+    transition-property: scale, background-color;
+    transition-duration: 0.1s;
+}
+
+.pane-interval-thumb-max:hover {
+    background-color: #d0d1d8;
+    scale: 1.1;
+}
+
+.pane-interval-thumb-max:active {
+    scale: 1.2;
+    background-color: #ffffff;
+}
+
+/* Label styling (scoped to this stylesheet) */
+.pane-label-text {
+    color: #78797f;
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}

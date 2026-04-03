@@ -1,0 +1,43 @@
+/* Select popup — spawned at UI root (outside pane hierarchy).
+   Uses hardcoded colors since CSS variables from pane.css aren't inherited. */
+
+.pane-select-popup {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1f24;
+    border-width: 1px;
+    border-color: #3c3d44;
+    border-radius: 2px;
+    padding: 2px;
+    row-gap: 1px;
+}
+
+.pane-select-item {
+    display: flex;
+    height: 22px;
+    min-height: 22px;
+    align-items: center;
+    padding: 0px 6px;
+    border-radius: 2px;
+    color: #bbbcc4;
+    font-size: 11px;
+    background-color: transparent;
+    transition-property: background-color, color;
+    transition-duration: 0.04s;
+}
+
+.pane-select-item:hover {
+    background-color: rgba(187, 188, 196, 0.10);
+    color: #d0d1d8;
+}
+
+.pane-select-item:active {
+    background-color: rgba(187, 188, 196, 0.20);
+    color: #ffffff;
+}
+
+.pane-select-item:focus-visible {
+    background-color: rgba(187, 188, 196, 0.10);
+    color: #d0d1d8;
+}

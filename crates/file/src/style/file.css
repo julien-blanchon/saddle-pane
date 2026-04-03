@@ -1,0 +1,78 @@
+.pane-row {
+    display: flex;
+    height: auto;
+    min-height: 28px;
+    min-width: 0px;
+    align-items: center;
+    padding: 0px 8px;
+    column-gap: 6px;
+    overflow: clip;
+}
+
+.pane-label-text {
+    color: #78797f;
+    font-size: 11px;
+    min-width: 0px;
+    overflow: clip;
+}
+
+.pane-file-area {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    column-gap: 4px;
+}
+
+.pane-file-browse-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    min-width: 60px;
+    padding: 0px 8px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    outline-width: 0px;
+    outline-color: transparent;
+    outline-offset: 0px;
+    transition-property: background-color;
+    transition-duration: 120ms;
+}
+
+.pane-file-browse-btn:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.pane-file-browse-btn:active {
+    background-color: rgba(74, 111, 165, 0.30);
+}
+
+.pane-file-browse-text {
+    color: #b0b2b8;
+    font-size: 10px;
+}
+
+.pane-file-path-area {
+    display: flex;
+    flex-grow: 1;
+    height: 22px;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.20);
+    border-radius: 3px;
+    border-width: 0px;
+    border-color: transparent;
+    padding: 0px 6px;
+    overflow: clip;
+}
+
+.pane-file-path-text {
+    color: #78797f;
+    font-size: 10px;
+}
+
+.pane-file-path-text.has-file {
+    color: #b0b2b8;
+}

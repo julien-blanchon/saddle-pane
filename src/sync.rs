@@ -54,22 +54,47 @@ pub(crate) fn sync_controls_to_store(
     >,
 ) {
     for (meta, ctrl) in &q_sliders {
-        sync_one(&mut store, &mut commands, meta, PaneValue::Float(ctrl.value));
+        sync_one(
+            &mut store,
+            &mut commands,
+            meta,
+            PaneValue::Float(ctrl.value),
+        );
     }
     for (meta, ctrl) in &q_toggles {
         sync_one(&mut store, &mut commands, meta, PaneValue::Bool(ctrl.value));
     }
     for (meta, ctrl) in &q_numbers {
-        sync_one(&mut store, &mut commands, meta, PaneValue::Float(ctrl.value));
+        sync_one(
+            &mut store,
+            &mut commands,
+            meta,
+            PaneValue::Float(ctrl.value),
+        );
     }
     for (meta, ctrl) in &q_texts {
-        sync_one(&mut store, &mut commands, meta, PaneValue::String(ctrl.value.clone()));
+        sync_one(
+            &mut store,
+            &mut commands,
+            meta,
+            PaneValue::String(ctrl.value.clone()),
+        );
     }
     for (meta, ctrl) in &q_selects {
-        sync_one(&mut store, &mut commands, meta, PaneValue::Int(ctrl.value as i64));
+        sync_one(
+            &mut store,
+            &mut commands,
+            meta,
+            PaneValue::Int(ctrl.value as i64),
+        );
     }
     for (meta, ctrl) in &q_colors {
-        sync_one(&mut store, &mut commands, meta, PaneValue::Color(ctrl.value));
+        sync_one(
+            &mut store,
+            &mut commands,
+            meta,
+            PaneValue::Color(ctrl.value),
+        );
     }
 }
 
@@ -84,11 +109,7 @@ fn dirty_key(meta: &PaneControlMeta) -> (String, String) {
 pub(crate) fn sync_store_to_controls(
     mut store: ResMut<PaneStore>,
     mut commands: Commands,
-    mut q_sliders: Query<(
-        &PaneControlMeta,
-        &mut SliderControl,
-        &SliderWidgetLink,
-    )>,
+    mut q_sliders: Query<(&PaneControlMeta, &mut SliderControl, &SliderWidgetLink)>,
     mut q_toggles: Query<
         (&PaneControlMeta, &mut ToggleControl, &ToggleWidgetLink),
         Without<SliderControl>,
@@ -99,15 +120,30 @@ pub(crate) fn sync_store_to_controls(
     >,
     mut q_texts: Query<
         (&PaneControlMeta, &mut TextControl),
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+        ),
     >,
     mut q_selects: Query<
         (&PaneControlMeta, &mut SelectControl),
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+        ),
     >,
     mut q_colors: Query<
         (&PaneControlMeta, &mut ColorControl),
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>, Without<SelectControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+            Without<SelectControl>,
+        ),
     >,
 ) {
     if !store.has_dirty() {

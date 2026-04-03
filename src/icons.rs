@@ -40,19 +40,16 @@ pub const ICON_EYE_OFF: &str = bevy_iconify::svg!("lucide:eye-off", color = "#5a
 pub const ICON_PALETTE: &str = bevy_iconify::svg!("lucide:palette", color = "#78797f");
 
 /// Chevron down — expanded folders/sections.
-pub const ICON_CHEVRON_DOWN: &str =
-    bevy_iconify::svg!("lucide:chevron-down", color = "#78797f");
+pub const ICON_CHEVRON_DOWN: &str = bevy_iconify::svg!("lucide:chevron-down", color = "#78797f");
 
 /// Chevron right — collapsed folders/sections.
-pub const ICON_CHEVRON_RIGHT: &str =
-    bevy_iconify::svg!("lucide:chevron-right", color = "#78797f");
+pub const ICON_CHEVRON_RIGHT: &str = bevy_iconify::svg!("lucide:chevron-right", color = "#78797f");
 
 /// Settings/gear icon.
 pub const ICON_SETTINGS: &str = bevy_iconify::svg!("lucide:settings", color = "#78797f");
 
 /// Sliders icon — general tweaking/controls.
-pub const ICON_SLIDERS: &str =
-    bevy_iconify::svg!("lucide:sliders-horizontal", color = "#78797f");
+pub const ICON_SLIDERS: &str = bevy_iconify::svg!("lucide:sliders-horizontal", color = "#78797f");
 
 /// Save icon.
 pub const ICON_SAVE: &str = bevy_iconify::svg!("lucide:save", color = "#b0b2b8");
@@ -73,8 +70,7 @@ pub const ICON_ACTIVITY: &str = bevy_iconify::svg!("lucide:activity", color = "#
 pub const ICON_BUG: &str = bevy_iconify::svg!("lucide:bug", color = "#78797f");
 
 /// Grip/drag-handle icon — vertical dots for dragging.
-pub const ICON_GRIP_VERTICAL: &str =
-    bevy_iconify::svg!("lucide:grip-vertical", color = "#5c5d64");
+pub const ICON_GRIP_VERTICAL: &str = bevy_iconify::svg!("lucide:grip-vertical", color = "#5c5d64");
 
 // ══════════════════════════════════════════════════════════════════════
 // Icon spawning

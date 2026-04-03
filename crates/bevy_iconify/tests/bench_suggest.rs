@@ -77,7 +77,10 @@ fn benchmark_fst_vs_naive() {
     let raw_bytes: usize = icons.iter().map(|s| s.len()).sum();
 
     println!("FST build:        {fst_build_us} us");
-    println!("FST size:         {fst_bytes} bytes ({:.1} KB)", fst_bytes as f64 / 1024.0);
+    println!(
+        "FST size:         {fst_bytes} bytes ({:.1} KB)",
+        fst_bytes as f64 / 1024.0
+    );
     println!(
         "Raw strings:      {raw_bytes} bytes ({:.1} KB)",
         raw_bytes as f64 / 1024.0
@@ -129,17 +132,17 @@ fn benchmark_fst_vs_naive() {
 
         println!("  query: \"{query}\"");
         println!("    FST d=1: {fst_d1_us:>5} us  -> {results:?}");
-        println!("    FST d=2: {fst_d2_us:>5} us  -> {:?}", &results_d2[..results_d2.len().min(5)]);
+        println!(
+            "    FST d=2: {fst_d2_us:>5} us  -> {:?}",
+            &results_d2[..results_d2.len().min(5)]
+        );
         println!("    Naive:   {naive_us:>5} us  -> {naive_top5:?}");
         println!();
     }
 
     // --- Assertions ---
     // FST should be much smaller than raw data
-    assert!(
-        fst_bytes < raw_bytes,
-        "FST should compress icon names"
-    );
+    assert!(fst_bytes < raw_bytes, "FST should compress icon names");
     // FST should build in under 10ms for 7K keys
     assert!(
         fst_build_us < 10_000,

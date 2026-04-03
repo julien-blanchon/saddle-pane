@@ -44,7 +44,12 @@ pub(crate) fn spawn_toggle_ui(
             row_entity = row.target_entity();
 
             // Label
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
             // Checkbox (using Checkbox headless widget)
             let mut toggle_cmd = row.spawn((

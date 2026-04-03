@@ -40,20 +40,22 @@ pub(crate) fn spawn_monitor_ui(
         .with_children(|row| {
             row_entity = row.target_entity();
 
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
-            row.spawn((
-                Node::default(),
-                ClassList::new("pane-monitor-value"),
-            ))
-            .with_children(|val| {
-                val.spawn((
-                    Text::new(&control.value),
-                    pane_font(10.0),
-                    ClassList::new("pane-monitor-value-text"),
-                    MonitorValueText,
-                ));
-            });
+            row.spawn((Node::default(), ClassList::new("pane-monitor-value")))
+                .with_children(|val| {
+                    val.spawn((
+                        Text::new(&control.value),
+                        pane_font(10.0),
+                        ClassList::new("pane-monitor-value-text"),
+                        MonitorValueText,
+                    ));
+                });
         });
 
     row_entity
@@ -145,31 +147,25 @@ pub(crate) fn spawn_monitor_log_ui(
             row_entity = row.target_entity();
 
             // Label at top
-            row.spawn((
-                Node::default(),
-                ClassList::new("pane-log-header"),
-            ))
-            .with_children(|header| {
-                header.spawn((
-                    Text::new(&meta.label),
-                    label_font(),
-                    ClassList::new("pane-label-text"),
-                ));
-            });
+            row.spawn((Node::default(), ClassList::new("pane-log-header")))
+                .with_children(|header| {
+                    header.spawn((
+                        Text::new(&meta.label),
+                        label_font(),
+                        ClassList::new("pane-label-text"),
+                    ));
+                });
 
             // Scrolling log area
-            row.spawn((
-                Node::default(),
-                ClassList::new("pane-log-area"),
-            ))
-            .with_children(|area| {
-                area.spawn((
-                    Text::new(control.display_text()),
-                    pane_font(9.0),
-                    ClassList::new("pane-log-text"),
-                    MonitorLogText,
-                ));
-            });
+            row.spawn((Node::default(), ClassList::new("pane-log-area")))
+                .with_children(|area| {
+                    area.spawn((
+                        Text::new(control.display_text()),
+                        pane_font(9.0),
+                        ClassList::new("pane-log-text"),
+                        MonitorLogText,
+                    ));
+                });
         });
 
     row_entity
@@ -272,23 +268,20 @@ pub(crate) fn spawn_monitor_graph_ui(
             row_entity = row.target_entity();
 
             // Header: label + current value
-            row.spawn((
-                Node::default(),
-                ClassList::new("pane-graph-header"),
-            ))
-            .with_children(|header| {
-                header.spawn((
-                    Text::new(&meta.label),
-                    label_font(),
-                    ClassList::new("pane-label-text"),
-                ));
-                header.spawn((
-                    Text::new(control.current_text()),
-                    pane_font(10.0),
-                    ClassList::new("pane-graph-value-text"),
-                    MonitorGraphValueText,
-                ));
-            });
+            row.spawn((Node::default(), ClassList::new("pane-graph-header")))
+                .with_children(|header| {
+                    header.spawn((
+                        Text::new(&meta.label),
+                        label_font(),
+                        ClassList::new("pane-label-text"),
+                    ));
+                    header.spawn((
+                        Text::new(control.current_text()),
+                        pane_font(10.0),
+                        ClassList::new("pane-graph-value-text"),
+                        MonitorGraphValueText,
+                    ));
+                });
 
             // Graph area with pre-allocated bars
             row.spawn((

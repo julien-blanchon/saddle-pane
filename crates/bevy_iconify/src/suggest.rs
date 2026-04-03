@@ -107,12 +107,7 @@ fn fst_fuzzy_search(set: &Set<Vec<u8>>, query: &str, max_distance: u32) -> Vec<S
 }
 
 /// Build an error message with fuzzy suggestions and a CLI tip.
-pub(crate) fn suggest_error_message(
-    pack: &str,
-    name: &str,
-    url: &str,
-    api_url: &str,
-) -> String {
+pub(crate) fn suggest_error_message(pack: &str, name: &str, url: &str, api_url: &str) -> String {
     let mut msg = format!("icon not found: {url}");
 
     if let Some(set) = get_or_build_fst(pack, api_url) {
@@ -166,12 +161,10 @@ mod tests {
 
     #[test]
     fn fst_fuzzy_finds_typo() {
-        let mut icons: Vec<String> = vec![
-            "arrow-left", "arrow-right", "home", "sword", "shield",
-        ]
-        .into_iter()
-        .map(String::from)
-        .collect();
+        let mut icons: Vec<String> = vec!["arrow-left", "arrow-right", "home", "sword", "shield"]
+            .into_iter()
+            .map(String::from)
+            .collect();
         icons.sort();
 
         let set = Set::from_iter(icons).unwrap();
@@ -181,8 +174,10 @@ mod tests {
 
     #[test]
     fn fst_fuzzy_distance_1() {
-        let icons: Vec<String> =
-            vec!["home", "hone", "hope", "zone"].into_iter().map(String::from).collect();
+        let icons: Vec<String> = vec!["home", "hone", "hope", "zone"]
+            .into_iter()
+            .map(String::from)
+            .collect();
         let set = Set::from_iter(icons).unwrap();
 
         let results = fst_fuzzy_search(&set, "home", 1);

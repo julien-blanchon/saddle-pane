@@ -15,8 +15,8 @@ use crate::controls::{
     },
     monitor::{update_monitor_graph, update_monitor_log_text, update_monitor_text},
     number::{on_number_step, update_number_step_repeat},
-    scroll::{handle_ui_scroll, send_ui_scroll_events},
     on_pane_reset_button,
+    scroll::{handle_ui_scroll, send_ui_scroll_events},
     select::{
         on_select_item_activate, on_select_menu_event, position_select_popup, sync_select_open,
         update_select_label,
@@ -27,13 +27,11 @@ use crate::controls::{
 // Events (PaneChanged, PaneButtonPressed) are observer-based — triggered via commands.trigger()
 use crate::icons::resolve_pane_icons;
 use crate::registry::PaneControlRegistry;
+use crate::search::{apply_search_filter, sync_search_input};
 use crate::store::PaneStore;
 use crate::sync::{sync_controls_to_store, sync_store_to_controls};
-use crate::search::{apply_search_filter, sync_search_input};
 use crate::theme::{PaneTheme, apply_pane_theme_override, apply_theme};
-use crate::ux::{
-    TooltipState, cleanup_orphaned_tooltips, show_tooltip,
-};
+use crate::ux::{TooltipState, cleanup_orphaned_tooltips, show_tooltip};
 
 /// System sets for ordering pane systems.
 #[derive(SystemSet, Debug, Clone, Copy, Hash, PartialEq, Eq)]

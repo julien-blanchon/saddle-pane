@@ -152,8 +152,8 @@ mod game {
         let hash = ((t * 1000.0) as u32).wrapping_mul(2654435761);
         let norm = |h: u32| (h as f32) / (u32::MAX as f32);
 
-        let radius = spawner.radius_range.0
-            + norm(hash) * (spawner.radius_range.1 - spawner.radius_range.0);
+        let radius =
+            spawner.radius_range.0 + norm(hash) * (spawner.radius_range.1 - spawner.radius_range.0);
         let speed = spawner.speed_range.0
             + norm(hash.wrapping_mul(3)) * (spawner.speed_range.1 - spawner.speed_range.0);
         let angle = norm(hash.wrapping_mul(7)) * std::f32::consts::TAU;
@@ -163,11 +163,7 @@ mod game {
             Ball { velocity, radius },
             Mesh2d(meshes.add(Circle::new(radius))),
             MeshMaterial2d(materials.add(ColorMaterial::from_color(visuals.ball_color))),
-            Transform::from_xyz(
-                (norm(hash.wrapping_mul(11)) - 0.5) * 200.0,
-                150.0,
-                0.0,
-            ),
+            Transform::from_xyz((norm(hash.wrapping_mul(11)) - 0.5) * 200.0, 150.0, 0.0),
         ));
     }
 
@@ -253,12 +249,24 @@ mod debug {
                tooltip = "Downward acceleration")]
         gravity: f32,
 
-        #[pane(slider, min = 0.0, max = 1.0, step = 0.01, default = 0.8,
-               tooltip = "Energy retained on bounce")]
+        #[pane(
+            slider,
+            min = 0.0,
+            max = 1.0,
+            step = 0.01,
+            default = 0.8,
+            tooltip = "Energy retained on bounce"
+        )]
         bounciness: f32,
 
-        #[pane(slider, min = 0.9, max = 1.0, step = 0.001, default = 0.99,
-               tooltip = "Velocity multiplier per frame")]
+        #[pane(
+            slider,
+            min = 0.9,
+            max = 1.0,
+            step = 0.001,
+            default = 0.99,
+            tooltip = "Velocity multiplier per frame"
+        )]
         damping: f32,
 
         #[pane(slider, min = 100.0, max = 800.0, step = 10.0, default = 500.0)]
@@ -294,8 +302,14 @@ mod debug {
     #[derive(Resource, Pane)]
     #[pane(title = "Spawner", position = "bottom-left")]
     pub struct SpawnerPane {
-        #[pane(slider, min = 0.0, max = 20.0, step = 0.5, default = 2.0,
-               tooltip = "Balls per second")]
+        #[pane(
+            slider,
+            min = 0.0,
+            max = 20.0,
+            step = 0.5,
+            default = 2.0,
+            tooltip = "Balls per second"
+        )]
         rate: f32,
 
         #[pane(slider, min = 50.0, max = 500.0, step = 10.0, default = 100.0)]
@@ -401,11 +415,9 @@ mod debug {
             pane.fps = fps as f32;
         }
 
-        let (sum, count) = q_balls
-            .iter()
-            .fold((0.0_f32, 0u32), |(sum, count), ball| {
-                (sum + ball.velocity.length(), count + 1)
-            });
+        let (sum, count) = q_balls.iter().fold((0.0_f32, 0u32), |(sum, count), ball| {
+            (sum + ball.velocity.length(), count + 1)
+        });
         pane.avg_velocity = if count > 0 { sum / count as f32 } else { 0.0 };
         pane.total_entities = q_all.iter().count() as u32;
         pane.frame = (time.elapsed_secs() * 60.0) as u64;

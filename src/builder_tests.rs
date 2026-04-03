@@ -62,11 +62,22 @@ fn slider_step_inline() {
 #[test]
 fn slider_with_tooltip_and_icon() {
     let spec = PaneBuilder::new("Test")
-        .slider("Speed", Slider::new(0.0..=10.0, 5.0).step(0.1).tooltip("help").icon("svg"))
+        .slider(
+            "Speed",
+            Slider::new(0.0..=10.0, 5.0)
+                .step(0.1)
+                .tooltip("help")
+                .icon("svg"),
+        )
         .build();
 
     match &spec.items[0] {
-        LayoutItem::Control(ControlSpec::Slider { tooltip, icon, step, .. }) => {
+        LayoutItem::Control(ControlSpec::Slider {
+            tooltip,
+            icon,
+            step,
+            ..
+        }) => {
             assert_eq!(tooltip.as_deref(), Some("help"));
             assert_eq!(icon.as_deref(), Some("svg"));
             assert!((step - 0.1).abs() < f64::EPSILON);
@@ -98,7 +109,13 @@ fn number_with_config() {
         .build();
 
     match &spec.items[0] {
-        LayoutItem::Control(ControlSpec::Number { default, step, min, max, .. }) => {
+        LayoutItem::Control(ControlSpec::Number {
+            default,
+            step,
+            min,
+            max,
+            ..
+        }) => {
             assert!((*default - 100.0).abs() < f64::EPSILON);
             assert!((*step - 1.0).abs() < f64::EPSILON);
             assert_eq!(*min, Some(0.0));
@@ -117,9 +134,18 @@ fn monitor_variants() {
         .build();
 
     assert_eq!(spec.items.len(), 3);
-    assert!(matches!(&spec.items[0], LayoutItem::Control(ControlSpec::Monitor { .. })));
-    assert!(matches!(&spec.items[1], LayoutItem::Control(ControlSpec::MonitorLog { .. })));
-    assert!(matches!(&spec.items[2], LayoutItem::Control(ControlSpec::MonitorGraph { .. })));
+    assert!(matches!(
+        &spec.items[0],
+        LayoutItem::Control(ControlSpec::Monitor { .. })
+    ));
+    assert!(matches!(
+        &spec.items[1],
+        LayoutItem::Control(ControlSpec::MonitorLog { .. })
+    ));
+    assert!(matches!(
+        &spec.items[2],
+        LayoutItem::Control(ControlSpec::MonitorGraph { .. })
+    ));
 }
 
 #[test]

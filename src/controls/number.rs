@@ -74,7 +74,12 @@ pub(crate) fn spawn_number_ui(
             row_entity = row.target_entity();
 
             // Label
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
             // [-] step button
             if control.show_step_buttons {

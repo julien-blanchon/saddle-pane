@@ -42,7 +42,12 @@ pub(crate) fn spawn_text_ui(
             row_entity = row.target_entity();
 
             // Label
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
             // Editable text value
             let mut editor_cmd = row.spawn((

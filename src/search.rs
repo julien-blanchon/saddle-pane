@@ -54,7 +54,9 @@ pub(crate) fn apply_search_filter(
                                 }
                             }
                         }
-                        if any_child_visible { break; }
+                        if any_child_visible {
+                            break;
+                        }
                     }
                 }
                 if let Ok(mut classes) = q_classes.get_mut(entity) {

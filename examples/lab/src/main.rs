@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_flair::FlairPlugin;
 use bevy_input_focus::InputDispatchPlugin;
+use bevy_ui_widgets::UiWidgetsPlugins;
 use saddle_pane::prelude::*;
 use saddle_pane_bezier::{BezierPaneExt, PaneBezierPlugin};
 use saddle_pane_button_grid::{ButtonGridPaneExt, PaneButtonGridPlugin};
@@ -8,7 +9,6 @@ use saddle_pane_file::{FilePaneExt, PaneFilePlugin};
 use saddle_pane_interval::PaneIntervalPlugin;
 use saddle_pane_radio_grid::{PaneRadioGridPlugin, RadioGridPaneExt};
 use saddle_pane_vector2::{PaneVector2Plugin, Vector2PaneExt};
-use bevy_ui_widgets::UiWidgetsPlugins;
 
 #[cfg(feature = "e2e")]
 mod scenarios;
@@ -56,7 +56,9 @@ fn main() {
         if let Some(ref name) = scenario_name {
             if let Some(mut scenario) = scenarios::scenario_by_name(name) {
                 if handoff {
-                    scenario.actions.push(saddle_bevy_e2e::action::Action::Handoff);
+                    scenario
+                        .actions
+                        .push(saddle_bevy_e2e::action::Action::Handoff);
                 }
                 saddle_bevy_e2e::init_scenario(&mut app, scenario);
             } else {
@@ -94,7 +96,9 @@ fn main() {
             ("tab_grids", 4),
             ("tab_files", 5),
             ("tab_status", 7),
-        ].into_iter().collect();
+        ]
+        .into_iter()
+        .collect();
         if let Some(&tab_idx) = scenario_name.as_deref().and_then(|n| tab_map.get(n)) {
             app.insert_resource(E2ETabSwitch(tab_idx));
             app.add_systems(Update, e2e_switch_tab);
@@ -112,25 +116,39 @@ fn setup(mut commands: Commands) {
 
     PaneBuilder::new("All Controls")
         .tab("General", |p| {
-            p.slider("Speed", Slider::new(0.0..=10.0, 5.0).step(0.1)
+            p.slider(
+                "Speed",
+                Slider::new(0.0..=10.0, 5.0)
+                    .step(0.1)
                     .tooltip("Movement speed in units/sec")
-                    .icon(saddle_pane::icons::ICON_ACTIVITY))
-                .slider("Volume", Slider::new(0.0..=1.0, 0.8).step(0.01)
-                    .tooltip("Master volume level"))
-                .slider("Opacity", Slider::new(0.0..=1.0, 1.0).step(0.01)
-                    .icon(saddle_pane::icons::ICON_EYE))
-                .toggle("Enabled", true)
-                .toggle_opts("Debug Mode", Toggle::new(false)
-                    .icon(saddle_pane::icons::ICON_BUG))
-                .separator()
-                .number("Score", Number::new(100.0))
-                .number("Lives", Number::new(3.0).step(1.0))
-                .text("Name", "Hero")
-                .text("Tag", "player_01")
-                .select("Quality", &["Low", "Medium", "High", "Ultra"], 2)
-                .select("Mode", &["Easy", "Normal", "Hard"], 1)
-                .color("Ambient", Color::srgb(0.2, 0.3, 0.8))
-                .color("Fog", Color::srgb(0.5, 0.5, 0.6))
+                    .icon(saddle_pane::icons::ICON_ACTIVITY),
+            )
+            .slider(
+                "Volume",
+                Slider::new(0.0..=1.0, 0.8)
+                    .step(0.01)
+                    .tooltip("Master volume level"),
+            )
+            .slider(
+                "Opacity",
+                Slider::new(0.0..=1.0, 1.0)
+                    .step(0.01)
+                    .icon(saddle_pane::icons::ICON_EYE),
+            )
+            .toggle("Enabled", true)
+            .toggle_opts(
+                "Debug Mode",
+                Toggle::new(false).icon(saddle_pane::icons::ICON_BUG),
+            )
+            .separator()
+            .number("Score", Number::new(100.0))
+            .number("Lives", Number::new(3.0).step(1.0))
+            .text("Name", "Hero")
+            .text("Tag", "player_01")
+            .select("Quality", &["Low", "Medium", "High", "Ultra"], 2)
+            .select("Mode", &["Easy", "Normal", "Hard"], 1)
+            .color("Ambient", Color::srgb(0.2, 0.3, 0.8))
+            .color("Fog", Color::srgb(0.5, 0.5, 0.6))
         })
         .tab("Physics", |p| {
             p.slider("Gravity", Slider::new(-20.0..=0.0, -9.81).step(0.1))
@@ -142,12 +160,7 @@ fn setup(mut commands: Commands) {
                 .interval("Temp Range", -40.0..=60.0, -10.0..=35.0)
                 .separator()
                 .vector2("Force", (0.0, -9.81))
-                .vector2_bounded(
-                    "Spawn Pos",
-                    -50.0..=50.0,
-                    0.0..=100.0,
-                    (0.0, 10.0),
-                )
+                .vector2_bounded("Spawn Pos", -50.0..=50.0, 0.0..=100.0, (0.0, 10.0))
         })
         .tab("Render", |p| {
             p.toggle("Shadows", true)
@@ -155,10 +168,16 @@ fn setup(mut commands: Commands) {
                 .toggle("Bloom", true)
                 .slider("Exposure", Slider::new(-3.0..=3.0, 0.0).step(0.1))
                 .slider("Gamma", Slider::new(0.5..=3.0, 2.2).step(0.01))
-                .color_opts("Sky Color", ColorPicker::new(Color::srgb(0.4, 0.6, 0.9))
-                    .icon(saddle_pane::icons::ICON_PALETTE))
-                .select_opts("Tone Map", SelectMenu::new(&["None", "Reinhard", "ACES", "AgX"], 3)
-                    .icon(saddle_pane::icons::ICON_SETTINGS))
+                .color_opts(
+                    "Sky Color",
+                    ColorPicker::new(Color::srgb(0.4, 0.6, 0.9))
+                        .icon(saddle_pane::icons::ICON_PALETTE),
+                )
+                .select_opts(
+                    "Tone Map",
+                    SelectMenu::new(&["None", "Reinhard", "ACES", "AgX"], 3)
+                        .icon(saddle_pane::icons::ICON_SETTINGS),
+                )
                 .separator()
                 .bezier("Ease Curve")
         })
@@ -170,24 +189,22 @@ fn setup(mut commands: Commands) {
         })
         .tab("Grids", |p| {
             p.radio_grid(
-                    "Shape",
-                    &["Cube", "Sphere", "Cylinder", "Torus", "Capsule", "Cone"],
-                    0,
-                )
-                .checkbox_grid(
-                    "Effects",
-                    &["Bloom", "SSAO", "SSR", "DoF", "Motion Blur", "TAA"],
-                    &[0, 5],
-                )
-                .multi_grid(
-                    "Layers",
-                    &["Base", "Detail", "Overlay", "FX"],
-                    2,
-                    &[0],
-                )
-                .separator()
-                .button_grid("Actions", &["Spawn", "Delete", "Clone", "Reset", "Undo", "Redo"])
-                .button_grid_columns("Tools", &["Select", "Move", "Rotate", "Scale"], 4)
+                "Shape",
+                &["Cube", "Sphere", "Cylinder", "Torus", "Capsule", "Cone"],
+                0,
+            )
+            .checkbox_grid(
+                "Effects",
+                &["Bloom", "SSAO", "SSR", "DoF", "Motion Blur", "TAA"],
+                &[0, 5],
+            )
+            .multi_grid("Layers", &["Base", "Detail", "Overlay", "FX"], 2, &[0])
+            .separator()
+            .button_grid(
+                "Actions",
+                &["Spawn", "Delete", "Clone", "Reset", "Undo", "Redo"],
+            )
+            .button_grid_columns("Tools", &["Select", "Move", "Rotate", "Scale"], 4)
         })
         .tab("Files", |p| {
             p.file("Texture")
@@ -206,11 +223,7 @@ fn setup(mut commands: Commands) {
                 .select("Log Level", &["Error", "Warn", "Info", "Debug", "Trace"], 2)
                 .text("Filter", "")
         })
-        .footer(|f| {
-            f.button("Reset All")
-                .button("Save")
-                .button("Load")
-        })
+        .footer(|f| f.button("Reset All").button("Save").button("Load"))
         .spawn(&mut commands);
 }
 
@@ -219,8 +232,14 @@ fn update_monitors(
     time: Res<Time>,
     diagnostics: Res<bevy::diagnostic::DiagnosticsStore>,
     mut q_monitors: Query<(&saddle_pane::controls::PaneControlMeta, &mut MonitorControl)>,
-    mut q_logs: Query<(&saddle_pane::controls::PaneControlMeta, &mut MonitorLogControl)>,
-    mut q_graphs: Query<(&saddle_pane::controls::PaneControlMeta, &mut MonitorGraphControl)>,
+    mut q_logs: Query<(
+        &saddle_pane::controls::PaneControlMeta,
+        &mut MonitorLogControl,
+    )>,
+    mut q_graphs: Query<(
+        &saddle_pane::controls::PaneControlMeta,
+        &mut MonitorGraphControl,
+    )>,
     mut frame_count: Local<u32>,
 ) {
     *frame_count += 1;
@@ -289,7 +308,10 @@ struct ImagePreview;
 /// Watch for Texture file changes and display the loaded image on screen.
 fn show_loaded_image(
     q_file: Query<
-        (&saddle_pane::controls::PaneControlMeta, &saddle_pane_file::FileControl),
+        (
+            &saddle_pane::controls::PaneControlMeta,
+            &saddle_pane_file::FileControl,
+        ),
         Changed<saddle_pane_file::FileControl>,
     >,
     mut images: ResMut<Assets<Image>>,
@@ -488,10 +510,7 @@ fn e2e_save_load(
 
 /// Set Speed to 2.0 via PaneStore at frame 100.
 #[cfg(feature = "e2e")]
-fn e2e_store_set(
-    mut frame: Local<u32>,
-    mut store: ResMut<saddle_pane::prelude::PaneStore>,
-) {
+fn e2e_store_set(mut frame: Local<u32>, mut store: ResMut<saddle_pane::prelude::PaneStore>) {
     *frame += 1;
     if *frame == 100 {
         store.set("All Controls", "Speed", 2.0_f64);

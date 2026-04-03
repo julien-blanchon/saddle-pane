@@ -133,7 +133,8 @@ pub fn derive_pane(input: TokenStream) -> TokenStream {
 
         // Generate read_field / write_field match arms based on control kind
         let type_str = type_to_string(field_type);
-        let (read_arm, write_arm) = field_rw_arms(&field_name_str, field_name, &type_str, &control_kind);
+        let (read_arm, write_arm) =
+            field_rw_arms(&field_name_str, field_name, &type_str, &control_kind);
         read_arms.push(read_arm);
         write_arms.push(write_arm);
 
@@ -218,7 +219,10 @@ pub fn derive_pane(input: TokenStream) -> TokenStream {
             // Try parsing "x, y" format
             let parts: Vec<&str> = s.split(',').collect();
             if parts.len() == 2 {
-                if let (Ok(x), Ok(y)) = (parts[0].trim().parse::<f64>(), parts[1].trim().parse::<f64>()) {
+                if let (Ok(x), Ok(y)) = (
+                    parts[0].trim().parse::<f64>(),
+                    parts[1].trim().parse::<f64>(),
+                ) {
                     return_position_absolute(x, y)
                 } else {
                     quote! {}
@@ -453,14 +457,27 @@ fn lit_to_f64(lit: &Lit) -> f64 {
 }
 
 enum ControlKind {
-    Slider { min: f64, max: f64, step: f64 },
-    Number { min: Option<f64>, max: Option<f64>, step: f64 },
+    Slider {
+        min: f64,
+        max: f64,
+        step: f64,
+    },
+    Number {
+        min: Option<f64>,
+        max: Option<f64>,
+        step: f64,
+    },
     Toggle,
     Text,
     Color,
-    Select { options: Vec<String> },
+    Select {
+        options: Vec<String>,
+    },
     Monitor,
-    Custom { control_id: String, config: Vec<(String, f64)> },
+    Custom {
+        control_id: String,
+        config: Vec<(String, f64)>,
+    },
 }
 
 fn determine_control_kind(attrs: &FieldAttrs, field_type: &syn::Type) -> ControlKind {
@@ -543,24 +560,56 @@ fn field_rw_arms(
         ControlKind::Slider { .. } | ControlKind::Number { .. } => {
             // Numeric types → PaneValue::Float(f64)
             let read = match type_str {
-                "f64" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident)), },
-                "f32" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                "i32" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                "i64" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                "u32" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                "u64" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                "usize" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
-                _ => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), },
+                "f64" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident)), }
+                }
+                "f32" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                "i32" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                "i64" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                "u32" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                "u64" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                "usize" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
+                _ => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Float(self.#field_ident as f64)), }
+                }
             };
             let write = match type_str {
-                "f64" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v; true } else { false } } },
-                "f32" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as f32; true } else { false } } },
-                "i32" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as i32; true } else { false } } },
-                "i64" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as i64; true } else { false } } },
-                "u32" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as u32; true } else { false } } },
-                "u64" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as u64; true } else { false } } },
-                "usize" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as usize; true } else { false } } },
-                _ => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as f64; true } else { false } } },
+                "f64" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v; true } else { false } } }
+                }
+                "f32" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as f32; true } else { false } } }
+                }
+                "i32" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as i32; true } else { false } } }
+                }
+                "i64" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as i64; true } else { false } } }
+                }
+                "u32" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as u32; true } else { false } } }
+                }
+                "u64" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as u64; true } else { false } } }
+                }
+                "usize" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as usize; true } else { false } } }
+                }
+                _ => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Float(v) = value { self.#field_ident = *v as f64; true } else { false } } }
+                }
             };
             (read, write)
         }
@@ -582,14 +631,26 @@ fn field_rw_arms(
         ControlKind::Select { .. } => {
             // Select uses Int variant for index
             let read = match type_str {
-                "usize" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), },
-                "i32" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), },
-                _ => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), },
+                "usize" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), }
+                }
+                "i32" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), }
+                }
+                _ => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::Int(self.#field_ident as i64)), }
+                }
             };
             let write = match type_str {
-                "usize" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as usize; true } else { false } } },
-                "i32" => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as i32; true } else { false } } },
-                _ => quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as usize; true } else { false } } },
+                "usize" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as usize; true } else { false } } }
+                }
+                "i32" => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as i32; true } else { false } } }
+                }
+                _ => {
+                    quote! { #field_name_str => { if let saddle_pane::controls::PaneValue::Int(v) = value { self.#field_ident = *v as usize; true } else { false } } }
+                }
             };
             (read, write)
         }
@@ -597,11 +658,21 @@ fn field_rw_arms(
             // Monitor fields are readable (game→pane) but not writable (pane→game).
             // Format the value as a string for display.
             let read = match type_str {
-                "f32" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{:.2}", self.#field_ident))), },
-                "f64" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{:.2}", self.#field_ident))), },
-                "String" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(self.#field_ident.clone())), },
-                "bool" => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{}", self.#field_ident))), },
-                _ => quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{}", self.#field_ident))), },
+                "f32" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{:.2}", self.#field_ident))), }
+                }
+                "f64" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{:.2}", self.#field_ident))), }
+                }
+                "String" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(self.#field_ident.clone())), }
+                }
+                "bool" => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{}", self.#field_ident))), }
+                }
+                _ => {
+                    quote! { #field_name_str => Some(saddle_pane::controls::PaneValue::String(format!("{}", self.#field_ident))), }
+                }
             };
             let write = quote! { #field_name_str => false, };
             (read, write)

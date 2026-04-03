@@ -5,12 +5,13 @@ use bevy::ui::auto_directional_navigation::AutoDirectionalNavigation;
 use bevy_flair::prelude::{ClassList, InlineStyle};
 use bevy_flair::style::components::NodeStyleSheet;
 use bevy_input_focus::tab_navigation::{TabGroup, TabIndex};
-use bevy_ui_widgets::{Activate, Button, ControlOrientation, CoreScrollbarThumb, Scrollbar, observe};
+use bevy_ui_widgets::{
+    Activate, Button, ControlOrientation, CoreScrollbarThumb, Scrollbar, observe,
+};
 
 use std::collections::HashMap;
 
 use crate::builder::{ControlSpec, LayoutItem, PaneSpec, TabSpec};
-use crate::registry::{PaneControlRegistry, SpawnFn, DefaultValueFn};
 use crate::controls::InitialValue;
 use crate::controls::PaneControlMeta;
 use crate::controls::PaneValue;
@@ -28,6 +29,7 @@ use crate::controls::text::{TextControl, spawn_text_ui};
 use crate::controls::toggle::{ToggleControl, spawn_toggle_ui};
 use crate::controls::{label_font, pane_font};
 use crate::icons::collect_icon_svgs;
+use crate::registry::{DefaultValueFn, PaneControlRegistry, SpawnFn};
 use crate::store::PaneStore;
 use crate::style;
 
@@ -149,7 +151,7 @@ impl Command for SpawnPaneCommand {
 
         // Pre-rasterize all icon SVGs to Image handles (world borrow is scoped)
         let (icon_cache, grip_icon_handle): (IconCache, Option<Handle<Image>>) = {
-            use crate::icons::{svg_to_image, ICON_GRIP_VERTICAL};
+            use crate::icons::{ICON_GRIP_VERTICAL, svg_to_image};
             let mut images = world.resource_mut::<Assets<Image>>();
             let mut cache = HashMap::new();
             collect_icon_svgs(&self.spec.items, &mut |svg: &str| {
@@ -239,72 +241,68 @@ impl Command for SpawnPaneCommand {
         let mut commands = world.commands();
         commands.entity(self.entity).with_children(|pane| {
             // Header row: drag handle | divider | title bar (collapse)
-            pane.spawn((
-                Node::default(),
-                ClassList::new("pane-header"),
-            ))
-            .with_children(|header| {
-                // Drag handle — separate from title bar so clicks don't trigger collapse
-                {
-                    let mut drag_handle = header.spawn((
-                        Node {
-                            width: Val::Px(16.0),
-                            height: Val::Px(24.0),
-                            min_width: Val::Px(16.0),
-                            min_height: Val::Px(24.0),
-                            flex_shrink: 0.0,
-                            align_items: AlignItems::Center,
-                            justify_content: JustifyContent::Center,
-                            ..default()
-                        },
-                        PaneDragHandle,
-                        ClassList::new("pane-drag-handle"),
-                        observe(on_drag_handle_drag_start),
-                        observe(on_drag_handle_drag),
-                        observe(on_drag_handle_drag_end),
-                    ));
-                    if let Some(ref handle) = grip_icon_handle {
-                        drag_handle.with_children(|dh| {
-                            dh.spawn((
-                                Node {
-                                    width: Val::Px(10.0),
-                                    height: Val::Px(10.0),
-                                    min_width: Val::Px(10.0),
-                                    min_height: Val::Px(10.0),
-                                    flex_shrink: 0.0,
-                                    ..default()
-                                },
-                                ImageNode::new(handle.clone()),
+            pane.spawn((Node::default(), ClassList::new("pane-header")))
+                .with_children(|header| {
+                    // Drag handle — separate from title bar so clicks don't trigger collapse
+                    {
+                        let mut drag_handle = header.spawn((
+                            Node {
+                                width: Val::Px(16.0),
+                                height: Val::Px(24.0),
+                                min_width: Val::Px(16.0),
+                                min_height: Val::Px(24.0),
+                                flex_shrink: 0.0,
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            },
+                            PaneDragHandle,
+                            ClassList::new("pane-drag-handle"),
+                            observe(on_drag_handle_drag_start),
+                            observe(on_drag_handle_drag),
+                            observe(on_drag_handle_drag_end),
+                        ));
+                        if let Some(ref handle) = grip_icon_handle {
+                            drag_handle.with_children(|dh| {
+                                dh.spawn((
+                                    Node {
+                                        width: Val::Px(10.0),
+                                        height: Val::Px(10.0),
+                                        min_width: Val::Px(10.0),
+                                        min_height: Val::Px(10.0),
+                                        flex_shrink: 0.0,
+                                        ..default()
+                                    },
+                                    ImageNode::new(handle.clone()),
+                                ));
+                            });
+                        }
+                    }
+
+                    // Vertical divider between drag handle and title
+                    header.spawn((Node::default(), ClassList::new("pane-header-divider")));
+
+                    // Title bar — collapse on click
+                    header
+                        .spawn((
+                            Node::default(),
+                            Interaction::default(),
+                            Button,
+                            PaneTitleBar,
+                            ClassList::new("pane-title"),
+                            observe(on_title_activate),
+                        ))
+                        .with_children(|title_bar| {
+                            // CSS-based chevron arrow (border trick, rotates via .is-collapsed)
+                            title_bar
+                                .spawn((Node::default(), ClassList::new("pane-collapse-icon")));
+                            title_bar.spawn((
+                                Text::new(&title),
+                                label_font(),
+                                ClassList::new("pane-title-text"),
                             ));
                         });
-                    }
-                }
-
-                // Vertical divider between drag handle and title
-                header.spawn((
-                    Node::default(),
-                    ClassList::new("pane-header-divider"),
-                ));
-
-                // Title bar — collapse on click
-                header.spawn((
-                    Node::default(),
-                    Interaction::default(),
-                    Button,
-                    PaneTitleBar,
-                    ClassList::new("pane-title"),
-                    observe(on_title_activate),
-                ))
-                .with_children(|title_bar| {
-                    // CSS-based chevron arrow (border trick, rotates via .is-collapsed)
-                    title_bar.spawn((Node::default(), ClassList::new("pane-collapse-icon")));
-                    title_bar.spawn((
-                        Text::new(&title),
-                        label_font(),
-                        ClassList::new("pane-title-text"),
-                    ));
                 });
-            });
 
             // Search bar (optional)
             if searchable {
@@ -367,7 +365,14 @@ impl Command for SpawnPaneCommand {
                     .with_children(|body| {
                         body_entity = body.target_entity();
                         for item in &self.spec.items {
-                            spawn_layout_item(body, item, &title, &asset_server, &custom_plugins, &icon_cache);
+                            spawn_layout_item(
+                                body,
+                                item,
+                                &title,
+                                &asset_server,
+                                &custom_plugins,
+                                &icon_cache,
+                            );
                         }
                     });
 
@@ -379,11 +384,7 @@ impl Command for SpawnPaneCommand {
                             min_width: Val::Px(4.0),
                             ..default()
                         },
-                        Scrollbar::new(
-                            body_entity,
-                            ControlOrientation::Vertical,
-                            16.0,
-                        ),
+                        Scrollbar::new(body_entity, ControlOrientation::Vertical, 16.0),
                     ))
                     .with_children(|track| {
                         track.spawn((
@@ -417,7 +418,14 @@ impl Command for SpawnPaneCommand {
                 ))
                 .with_children(|footer| {
                     for item in &self.spec.footer {
-                        spawn_layout_item(footer, item, &title, &asset_server, &custom_plugins, &icon_cache);
+                        spawn_layout_item(
+                            footer,
+                            item,
+                            &title,
+                            &asset_server,
+                            &custom_plugins,
+                            &icon_cache,
+                        );
                     }
                 });
             }
@@ -460,7 +468,15 @@ fn spawn_layout_item(
             spawn_control(parent, spec, pane_title, asset_server, custom, icon_cache);
         }
         LayoutItem::TabGroup { tabs, active } => {
-            spawn_tab_group(parent, tabs, *active, pane_title, asset_server, custom, icon_cache);
+            spawn_tab_group(
+                parent,
+                tabs,
+                *active,
+                pane_title,
+                asset_server,
+                custom,
+                icon_cache,
+            );
         }
         LayoutItem::Folder {
             label,
@@ -518,7 +534,14 @@ fn spawn_layout_item(
                         .spawn((Node::default(), ClassList::new(body_class), PaneFolderBody))
                         .with_children(|body| {
                             for child_item in items {
-                                spawn_layout_item(body, child_item, pane_title, asset_server, custom, icon_cache);
+                                spawn_layout_item(
+                                    body,
+                                    child_item,
+                                    pane_title,
+                                    asset_server,
+                                    custom,
+                                    icon_cache,
+                                );
                             }
                         });
                 });
@@ -544,7 +567,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = SliderControl {
                 value: *default,
                 min: *min,
@@ -563,7 +592,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = ToggleControl { value: *default };
             let row = spawn_toggle_ui(parent, &meta, &control, asset_server);
             let mut cmds = parent.commands();
@@ -576,7 +611,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let row = spawn_button_ui(parent, &meta, asset_server);
             apply_row_extras(&mut parent.commands(), row, &meta);
         }
@@ -590,7 +631,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = NumberControl {
                 value: *default,
                 min: *min,
@@ -610,7 +657,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = TextControl {
                 value: default.clone(),
             };
@@ -627,7 +680,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = SelectControl {
                 value: *default,
                 options: options.clone(),
@@ -644,7 +703,13 @@ fn spawn_control(
             tooltip,
             icon,
         } => {
-            let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+            let meta = make_meta(
+                pane_title,
+                label,
+                tooltip.as_deref(),
+                icon.as_deref(),
+                icon_cache,
+            );
             let control = ColorControl { value: *default };
             let row = spawn_color_ui(parent, &meta, &control, asset_server);
             let mut cmds = parent.commands();
@@ -659,10 +724,7 @@ fn spawn_control(
             };
             spawn_monitor_ui(parent, &meta, &control, asset_server);
         }
-        ControlSpec::MonitorLog {
-            label,
-            buffer_size,
-        } => {
+        ControlSpec::MonitorLog { label, buffer_size } => {
             let meta = make_meta(pane_title, label, None, None, icon_cache);
             let control = MonitorLogControl::new(*buffer_size);
             spawn_monitor_log_ui(parent, &meta, &control, asset_server);
@@ -685,7 +747,13 @@ fn spawn_control(
             icon,
         } => {
             if let Some(spawn_fn) = custom.spawn_fns.get(control_id) {
-                let meta = make_meta(pane_title, label, tooltip.as_deref(), icon.as_deref(), icon_cache);
+                let meta = make_meta(
+                    pane_title,
+                    label,
+                    tooltip.as_deref(),
+                    icon.as_deref(),
+                    icon_cache,
+                );
                 let row = spawn_fn(parent, &meta, config, asset_server);
                 let mut cmds = parent.commands();
                 // Set initial value from plugin's default_value function
@@ -712,9 +780,7 @@ fn make_meta(
     icon: Option<&str>,
     icon_cache: &IconCache,
 ) -> PaneControlMeta {
-    let icon_handle = icon
-        .and_then(|s| icon_cache.get(s))
-        .cloned();
+    let icon_handle = icon.and_then(|s| icon_cache.get(s)).cloned();
     PaneControlMeta {
         pane_title: pane_title.to_string(),
         label: label.to_string(),
@@ -733,7 +799,12 @@ fn apply_row_extras(commands: &mut Commands, row: Entity, meta: &PaneControlMeta
     }
 }
 
-fn init_store_values(store: &mut PaneStore, pane_title: &str, items: &[LayoutItem], custom: &CustomPlugins) {
+fn init_store_values(
+    store: &mut PaneStore,
+    pane_title: &str,
+    items: &[LayoutItem],
+    custom: &CustomPlugins,
+) {
     for item in items {
         match item {
             LayoutItem::Control(spec) => {
@@ -875,7 +946,14 @@ fn spawn_tab_group(
                             ))
                             .with_children(|page| {
                                 for item in &tab.items {
-                                    spawn_layout_item(page, item, pane_title, asset_server, custom, icon_cache);
+                                    spawn_layout_item(
+                                        page,
+                                        item,
+                                        pane_title,
+                                        asset_server,
+                                        custom,
+                                        icon_cache,
+                                    );
                                 }
                             });
                     }
@@ -1020,7 +1098,12 @@ fn on_drag_handle_drag_start(
     mut ev: On<Pointer<DragStart>>,
     q_parent: Query<&ChildOf>,
     mut q_pane: Query<
-        (&mut Node, &UiGlobalTransform, &ComputedNode, &mut PaneDragState),
+        (
+            &mut Node,
+            &UiGlobalTransform,
+            &ComputedNode,
+            &mut PaneDragState,
+        ),
         With<PaneRoot>,
     >,
 ) {
@@ -1132,8 +1215,12 @@ fn on_resize_drag_start(
 ) {
     ev.propagate(false);
 
-    let Ok(child_of) = q_parent.get(ev.entity) else { return };
-    let Ok((node, computed, mut resize)) = q_pane.get_mut(child_of.parent()) else { return };
+    let Ok(child_of) = q_parent.get(ev.entity) else {
+        return;
+    };
+    let Ok((node, computed, mut resize)) = q_pane.get_mut(child_of.parent()) else {
+        return;
+    };
 
     resize.resizing = true;
     // Get current width: prefer Node.width if Px, otherwise use computed size
@@ -1150,9 +1237,15 @@ fn on_resize_drag(
 ) {
     ev.propagate(false);
 
-    let Ok(child_of) = q_parent.get(ev.entity) else { return };
-    let Ok((mut node, resize)) = q_pane.get_mut(child_of.parent()) else { return };
-    if !resize.resizing { return; }
+    let Ok(child_of) = q_parent.get(ev.entity) else {
+        return;
+    };
+    let Ok((mut node, resize)) = q_pane.get_mut(child_of.parent()) else {
+        return;
+    };
+    if !resize.resizing {
+        return;
+    }
 
     let current_width = match node.width {
         Val::Px(v) => v,
@@ -1169,7 +1262,9 @@ fn on_resize_drag_end(
 ) {
     ev.propagate(false);
 
-    let Ok(child_of) = q_parent.get(ev.entity) else { return };
+    let Ok(child_of) = q_parent.get(ev.entity) else {
+        return;
+    };
     if let Ok(mut resize) = q_pane.get_mut(child_of.parent()) {
         resize.resizing = false;
     }

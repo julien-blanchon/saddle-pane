@@ -34,10 +34,7 @@ pub(crate) fn send_ui_scroll_events(
         // Trigger on all entities hovered by the default pointer
         if let Some(pointer_map) = hover_map.get(&PointerId::Mouse) {
             for entity in pointer_map.keys().copied() {
-                commands.trigger(UiScroll {
-                    entity,
-                    delta,
-                });
+                commands.trigger(UiScroll { entity, delta });
             }
         }
     }

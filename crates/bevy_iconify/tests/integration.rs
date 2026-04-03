@@ -17,7 +17,10 @@ fn svg_macro_with_color() {
     let svg = bevy_iconify::svg!("mdi:home", color = "red");
     assert!(svg.contains("<svg"));
     // When color is set, currentColor should be replaced
-    assert!(!svg.contains("currentColor"), "color=red should replace currentColor");
+    assert!(
+        !svg.contains("currentColor"),
+        "color=red should replace currentColor"
+    );
 }
 
 /// Icon with explicit dimensions.

@@ -98,7 +98,9 @@ impl Plugin for PaneRadioGridPlugin {
 fn build_systems(app: &mut App) {
     app.add_systems(
         PostUpdate,
-        (update_radio_grid_display, sync_radio_grid_to_store).chain().in_set(PaneSystems::Display),
+        (update_radio_grid_display, sync_radio_grid_to_store)
+            .chain()
+            .in_set(PaneSystems::Display),
     );
 }
 
@@ -295,7 +297,10 @@ fn radio_config(options: &[&str], max_selected: usize, defaults: &[usize]) -> Co
     ControlConfig::new()
         .string_list("labels", options.iter().map(|s| s.to_string()).collect())
         .int("max_selected", max_selected as i64)
-        .float_list("default_selected", defaults.iter().map(|&i| i as f64).collect())
+        .float_list(
+            "default_selected",
+            defaults.iter().map(|&i| i as f64).collect(),
+        )
 }
 
 pub trait RadioGridPaneExt {
@@ -304,7 +309,13 @@ pub trait RadioGridPaneExt {
     /// Add a checkbox grid (unlimited selection).
     fn checkbox_grid(self, label: &str, options: &[&str], defaults: &[usize]) -> Self;
     /// Add a multi-select grid with a selection limit.
-    fn multi_grid(self, label: &str, options: &[&str], max_selected: usize, defaults: &[usize]) -> Self;
+    fn multi_grid(
+        self,
+        label: &str,
+        options: &[&str],
+        max_selected: usize,
+        defaults: &[usize],
+    ) -> Self;
 }
 
 macro_rules! impl_radio_grid_ext {
@@ -316,8 +327,18 @@ macro_rules! impl_radio_grid_ext {
             fn checkbox_grid(self, label: &str, options: &[&str], defaults: &[usize]) -> Self {
                 self.custom("radio_grid", label, radio_config(options, 0, defaults))
             }
-            fn multi_grid(self, label: &str, options: &[&str], max_selected: usize, defaults: &[usize]) -> Self {
-                self.custom("radio_grid", label, radio_config(options, max_selected, defaults))
+            fn multi_grid(
+                self,
+                label: &str,
+                options: &[&str],
+                max_selected: usize,
+                defaults: &[usize],
+            ) -> Self {
+                self.custom(
+                    "radio_grid",
+                    label,
+                    radio_config(options, max_selected, defaults),
+                )
             }
         }
     };

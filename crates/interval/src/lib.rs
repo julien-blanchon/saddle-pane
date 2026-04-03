@@ -163,10 +163,7 @@ fn build_interval_systems(app: &mut App) {
         PostUpdate,
         update_interval_display.in_set(PaneSystems::Display),
     );
-    app.add_systems(
-        PostUpdate,
-        sync_interval_to_store.in_set(PaneSystems::Sync),
-    );
+    app.add_systems(PostUpdate, sync_interval_to_store.in_set(PaneSystems::Sync));
 }
 
 fn interval_default_value(config: &ControlConfig) -> Option<PaneValue> {
@@ -331,7 +328,14 @@ fn on_min_drag(
     q_track: Query<&ComputedNode>,
     mut q_row: Query<(&mut IntervalControl, &IntervalDragState)>,
 ) {
-    handle_drag(ev.entity, ev.event().delta.x, true, &q_parent, &q_track, &mut q_row);
+    handle_drag(
+        ev.entity,
+        ev.event().delta.x,
+        true,
+        &q_parent,
+        &q_track,
+        &mut q_row,
+    );
 }
 
 fn on_max_drag(
@@ -340,7 +344,14 @@ fn on_max_drag(
     q_track: Query<&ComputedNode>,
     mut q_row: Query<(&mut IntervalControl, &IntervalDragState)>,
 ) {
-    handle_drag(ev.entity, ev.event().delta.x, false, &q_parent, &q_track, &mut q_row);
+    handle_drag(
+        ev.entity,
+        ev.event().delta.x,
+        false,
+        &q_parent,
+        &q_track,
+        &mut q_row,
+    );
 }
 
 fn on_min_drag_end(
@@ -383,14 +394,24 @@ fn handle_drag(
     q_track: &Query<&ComputedNode>,
     q_row: &mut Query<(&mut IntervalControl, &IntervalDragState)>,
 ) {
-    let Ok(track_of) = q_parent.get(thumb_entity) else { return };
+    let Ok(track_of) = q_parent.get(thumb_entity) else {
+        return;
+    };
     let track_entity = track_of.parent();
-    let Ok(track_node) = q_track.get(track_entity) else { return };
+    let Ok(track_node) = q_track.get(track_entity) else {
+        return;
+    };
     let track_width = track_node.size().x;
-    if track_width < 1.0 { return; }
+    if track_width < 1.0 {
+        return;
+    }
 
-    let Some(row) = walk_to_row(thumb_entity, q_parent) else { return };
-    let Ok((mut ctrl, _)) = q_row.get_mut(row) else { return };
+    let Some(row) = walk_to_row(thumb_entity, q_parent) else {
+        return;
+    };
+    let Ok((mut ctrl, _)) = q_row.get_mut(row) else {
+        return;
+    };
 
     let range = ctrl.bounds_max - ctrl.bounds_min;
     let delta_val = (delta_x as f64 / track_width as f64) * range;
@@ -404,7 +425,9 @@ fn handle_drag(
 }
 
 fn snap(value: f64, step: f64) -> f64 {
-    if step <= 0.0 { return value; }
+    if step <= 0.0 {
+        return value;
+    }
     (value / step).round() * step
 }
 

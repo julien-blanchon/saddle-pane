@@ -102,11 +102,7 @@ fn render_nodes(
     }
 }
 
-fn render_path(
-    path: &usvg::Path,
-    transform: tiny_skia::Transform,
-    pixmap: &mut tiny_skia::Pixmap,
-) {
+fn render_path(path: &usvg::Path, transform: tiny_skia::Transform, pixmap: &mut tiny_skia::Pixmap) {
     let data = path.data();
 
     if let Some(fill) = path.fill() {

@@ -60,9 +60,7 @@ impl Slider {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── Number ──
 
@@ -129,9 +127,7 @@ impl Number {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── Toggle (optional config) ──
 
@@ -166,9 +162,7 @@ impl Toggle {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── Button (optional config) ──
 
@@ -185,7 +179,9 @@ pub struct ButtonOpts {
 impl ButtonOpts {
     /// Create a button config.
     pub fn new() -> Self {
-        Self { opts: ControlOpts::default() }
+        Self {
+            opts: ControlOpts::default(),
+        }
     }
 
     /// Set hover tooltip text.
@@ -199,9 +195,7 @@ impl ButtonOpts {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── ColorPicker (optional config) ──
 
@@ -236,9 +230,7 @@ impl ColorPicker {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── TextInput (optional config) ──
 
@@ -273,9 +265,7 @@ impl TextInput {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── SelectMenu (optional config) ──
 
@@ -312,9 +302,7 @@ impl SelectMenu {
         self.opts.icon = Some(svg.to_string());
         self
     }
-
 }
-
 
 // ── Monitor ──
 

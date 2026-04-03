@@ -400,11 +400,7 @@ impl PaneBuilder {
     ///     .footer(|f| f.button("Reset All"))
     ///     .spawn(&mut commands);
     /// ```
-    pub fn tab(
-        mut self,
-        label: &str,
-        f: impl FnOnce(FolderBuilder) -> FolderBuilder,
-    ) -> Self {
+    pub fn tab(mut self, label: &str, f: impl FnOnce(FolderBuilder) -> FolderBuilder) -> Self {
         let page = f(FolderBuilder::new());
         // Find or create the tab group in items
         let tab_spec = TabSpec {
@@ -428,10 +424,7 @@ impl PaneBuilder {
     /// ```rust,ignore
     /// .footer(|f| f.button("Reset All").button("Save").button("Load"))
     /// ```
-    pub fn footer(
-        mut self,
-        f: impl FnOnce(FolderBuilder) -> FolderBuilder,
-    ) -> Self {
+    pub fn footer(mut self, f: impl FnOnce(FolderBuilder) -> FolderBuilder) -> Self {
         let built = f(FolderBuilder::new());
         self.footer = built.items;
         self

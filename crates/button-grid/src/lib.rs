@@ -119,8 +119,7 @@ fn spawn_button_grid_ui(
                                 label: label.clone(),
                             },
                             bevy_ui_widgets::observe(
-                                move |_: On<bevy_ui_widgets::Activate>,
-                                      mut commands: Commands| {
+                                move |_: On<bevy_ui_widgets::Activate>, mut commands: Commands| {
                                     commands.trigger(PaneButtonPressed {
                                         pane: meta_for_btn.pane_title.clone(),
                                         label: btn_label.clone(),
@@ -148,10 +147,7 @@ fn spawn_button_grid_ui(
 
 fn button_grid_config(buttons: &[&str], columns: usize) -> ControlConfig {
     ControlConfig::new()
-        .string_list(
-            "labels",
-            buttons.iter().map(|s| s.to_string()).collect(),
-        )
+        .string_list("labels", buttons.iter().map(|s| s.to_string()).collect())
         .int("columns", columns as i64)
 }
 

@@ -32,7 +32,13 @@ impl TooltipState {
 /// System: show tooltip on hover for controls that have one.
 pub(crate) fn show_tooltip(
     q_interactions: Query<
-        (Entity, &PaneControlMeta, &Interaction, &GlobalTransform, &ComputedNode),
+        (
+            Entity,
+            &PaneControlMeta,
+            &Interaction,
+            &GlobalTransform,
+            &ComputedNode,
+        ),
         Changed<Interaction>,
     >,
     mut tooltip_state: ResMut<TooltipState>,

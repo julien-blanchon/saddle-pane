@@ -75,7 +75,12 @@ pub(crate) fn spawn_select_ui(
             row_entity = row.target_entity();
 
             // Label
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
             // Wrapper: contains trigger + popup, position: relative for popup alignment
             row.spawn((
@@ -128,23 +133,23 @@ fn spawn_select_popup(
             NodeStyleSheet::new(asset_server.load(POPUP_STYLE_PATH)),
             GlobalZIndex(1000),
         ))
-            .with_children(|popup| {
-                for (i, option) in control.options.iter().enumerate() {
-                    popup
-                        .spawn((
-                            Node::default(),
-                            Interaction::default(),
-                            MenuItem,
-                            SelectItemIndex(i),
-                            ClassList::new("pane-select-item"),
-                            AutoDirectionalNavigation::default(),
-                            TabIndex(0),
-                        ))
-                        .with_children(|item| {
-                            item.spawn((Text::new(option.clone()), value_font()));
-                        });
-                }
-            });
+        .with_children(|popup| {
+            for (i, option) in control.options.iter().enumerate() {
+                popup
+                    .spawn((
+                        Node::default(),
+                        Interaction::default(),
+                        MenuItem,
+                        SelectItemIndex(i),
+                        ClassList::new("pane-select-item"),
+                        AutoDirectionalNavigation::default(),
+                        TabIndex(0),
+                    ))
+                    .with_children(|item| {
+                        item.spawn((Text::new(option.clone()), value_font()));
+                    });
+            }
+        });
 }
 
 /// System: sync SelectOpen → spawn/despawn popup.
@@ -282,9 +287,8 @@ pub(crate) fn position_select_popup(
         let Ok(children) = q_children.get(owner.0) else {
             continue;
         };
-        let Some((global_transform, computed)) = children
-            .iter()
-            .find_map(|child| q_wrapper.get(child).ok())
+        let Some((global_transform, computed)) =
+            children.iter().find_map(|child| q_wrapper.get(child).ok())
         else {
             continue;
         };

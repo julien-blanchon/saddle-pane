@@ -83,7 +83,12 @@ fn build_systems(app: &mut App) {
     app.init_resource::<FileDialogChannel>();
     app.add_systems(
         PostUpdate,
-        (launch_file_dialogs, collect_file_results, update_file_display, sync_file_to_store)
+        (
+            launch_file_dialogs,
+            collect_file_results,
+            update_file_display,
+            sync_file_to_store,
+        )
             .chain()
             .in_set(PaneSystems::Display),
     );
@@ -221,10 +226,7 @@ fn launch_file_dialogs(
 }
 
 /// Collect results from completed file dialogs.
-fn collect_file_results(
-    mut q: Query<&mut FileControl>,
-    channel: Res<FileDialogChannel>,
-) {
+fn collect_file_results(mut q: Query<&mut FileControl>, channel: Res<FileDialogChannel>) {
     let rx = channel.rx.lock().unwrap();
     while let Ok((entity, path)) = rx.try_recv() {
         if let Ok(mut ctrl) = q.get_mut(entity) {
@@ -297,7 +299,10 @@ pub trait FilePaneExt {
 fn file_config(extensions: &[&str]) -> ControlConfig {
     let mut config = ControlConfig::new().string("dialog_title", "Select File");
     if !extensions.is_empty() {
-        config = config.string_list("extensions", extensions.iter().map(|s| s.to_string()).collect());
+        config = config.string_list(
+            "extensions",
+            extensions.iter().map(|s| s.to_string()).collect(),
+        );
     }
     config
 }

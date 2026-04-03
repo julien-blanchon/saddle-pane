@@ -25,7 +25,9 @@ pub trait PaneDerive: Resource {
     fn field_descriptors() -> Vec<FieldDescriptor>;
 
     /// Optional position for the spawned pane. `None` uses default (top-right).
-    fn pane_position() -> Option<crate::builder::PanePosition> { None }
+    fn pane_position() -> Option<crate::builder::PanePosition> {
+        None
+    }
 
     /// Read a field value by name. Returns `None` if the field doesn't exist.
     fn read_field(&self, field_name: &str) -> Option<PaneValue>;
@@ -50,12 +52,22 @@ pub struct FieldDescriptor {
 /// The type of control for a field.
 #[derive(Clone, Debug)]
 pub enum FieldControlKind {
-    Slider { min: f64, max: f64, step: f64 },
-    Number { min: Option<f64>, max: Option<f64>, step: f64 },
+    Slider {
+        min: f64,
+        max: f64,
+        step: f64,
+    },
+    Number {
+        min: Option<f64>,
+        max: Option<f64>,
+        step: f64,
+    },
     Toggle,
     Text,
     Color,
-    Select { options: Vec<String> },
+    Select {
+        options: Vec<String>,
+    },
     Monitor,
     /// Custom plugin control. `control_id` matches the plugin's registered ID.
     /// Config values are passed as key-value pairs.
@@ -94,11 +106,7 @@ impl RegisterPaneExt for App {
         self.add_systems(Startup, spawn_derive_pane::<T>);
         self.add_systems(
             PostUpdate,
-            (
-                sync_pane_to_resource::<T>,
-                sync_resource_to_pane::<T>,
-            )
-                .chain(),
+            (sync_pane_to_resource::<T>, sync_resource_to_pane::<T>).chain(),
         );
         self
     }
@@ -175,12 +183,19 @@ fn spawn_derive_pane<T: PaneDerive>(resource: Res<T>, mut commands: Commands) {
 }
 
 /// Get a default value for a field from the resource, falling back to the descriptor kind's default.
-fn field_default_f64(resource: &dyn PaneDeriveReader, desc: &FieldDescriptor, fallback: f64) -> f64 {
-    resource.read_field(&desc.field_name).and_then(|v| match v {
-        PaneValue::Float(f) => Some(f),
-        PaneValue::Int(i) => Some(i as f64),
-        _ => None,
-    }).unwrap_or(fallback)
+fn field_default_f64(
+    resource: &dyn PaneDeriveReader,
+    desc: &FieldDescriptor,
+    fallback: f64,
+) -> f64 {
+    resource
+        .read_field(&desc.field_name)
+        .and_then(|v| match v {
+            PaneValue::Float(f) => Some(f),
+            PaneValue::Int(i) => Some(i as f64),
+            _ => None,
+        })
+        .unwrap_or(fallback)
 }
 
 /// Trait alias for reading fields (avoids generic constraints in helpers).
@@ -205,60 +220,106 @@ macro_rules! add_field {
             FieldControlKind::Slider { min, max, step } => {
                 let default = field_default_f64(resource, desc, (*min + *max) / 2.0);
                 let mut s = params::Slider::new(*min..=*max, default).step(*step);
-                if let Some(ref tip) = desc.tooltip { s = s.tooltip(tip.as_str()); }
-                if let Some(ref icon) = desc.icon { s = s.icon(icon); }
+                if let Some(ref tip) = desc.tooltip {
+                    s = s.tooltip(tip.as_str());
+                }
+                if let Some(ref icon) = desc.icon {
+                    s = s.icon(icon);
+                }
                 $builder.slider(&desc.label, s)
             }
             FieldControlKind::Number { min, max, step } => {
                 let default = field_default_f64(resource, desc, 0.0);
                 let mut n = params::Number::new(default).step(*step);
-                if let Some(mn) = min { n = n.min(*mn); }
-                if let Some(mx) = max { n = n.max(*mx); }
-                if let Some(ref tip) = desc.tooltip { n = n.tooltip(tip.as_str()); }
-                if let Some(ref icon) = desc.icon { n = n.icon(icon); }
+                if let Some(mn) = min {
+                    n = n.min(*mn);
+                }
+                if let Some(mx) = max {
+                    n = n.max(*mx);
+                }
+                if let Some(ref tip) = desc.tooltip {
+                    n = n.tooltip(tip.as_str());
+                }
+                if let Some(ref icon) = desc.icon {
+                    n = n.icon(icon);
+                }
                 $builder.number(&desc.label, n)
             }
             FieldControlKind::Toggle => {
-                let default = resource.read_field(&desc.field_name)
-                    .and_then(|v| if let PaneValue::Bool(b) = v { Some(b) } else { None })
+                let default = resource
+                    .read_field(&desc.field_name)
+                    .and_then(|v| {
+                        if let PaneValue::Bool(b) = v {
+                            Some(b)
+                        } else {
+                            None
+                        }
+                    })
                     .unwrap_or(false);
                 if desc.tooltip.is_some() || desc.icon.is_some() {
                     let mut t = params::Toggle::new(default);
-                    if let Some(ref tip) = desc.tooltip { t = t.tooltip(tip.as_str()); }
-                    if let Some(ref icon) = desc.icon { t = t.icon(icon); }
+                    if let Some(ref tip) = desc.tooltip {
+                        t = t.tooltip(tip.as_str());
+                    }
+                    if let Some(ref icon) = desc.icon {
+                        t = t.icon(icon);
+                    }
                     $builder.toggle_opts(&desc.label, t)
                 } else {
                     $builder.toggle(&desc.label, default)
                 }
             }
             FieldControlKind::Text => {
-                let default = resource.read_field(&desc.field_name)
-                    .and_then(|v| if let PaneValue::String(s) = v { Some(s) } else { None })
+                let default = resource
+                    .read_field(&desc.field_name)
+                    .and_then(|v| {
+                        if let PaneValue::String(s) = v {
+                            Some(s)
+                        } else {
+                            None
+                        }
+                    })
                     .unwrap_or_default();
                 if desc.tooltip.is_some() || desc.icon.is_some() {
                     let mut t = params::TextInput::new(&default);
-                    if let Some(ref tip) = desc.tooltip { t = t.tooltip(tip.as_str()); }
-                    if let Some(ref icon) = desc.icon { t = t.icon(icon); }
+                    if let Some(ref tip) = desc.tooltip {
+                        t = t.tooltip(tip.as_str());
+                    }
+                    if let Some(ref icon) = desc.icon {
+                        t = t.icon(icon);
+                    }
                     $builder.text_opts(&desc.label, t)
                 } else {
                     $builder.text(&desc.label, &default)
                 }
             }
             FieldControlKind::Color => {
-                let default = resource.read_field(&desc.field_name)
-                    .and_then(|v| if let PaneValue::Color(c) = v { Some(c) } else { None })
+                let default = resource
+                    .read_field(&desc.field_name)
+                    .and_then(|v| {
+                        if let PaneValue::Color(c) = v {
+                            Some(c)
+                        } else {
+                            None
+                        }
+                    })
                     .unwrap_or(Color::WHITE);
                 if desc.tooltip.is_some() || desc.icon.is_some() {
                     let mut c = params::ColorPicker::new(default);
-                    if let Some(ref tip) = desc.tooltip { c = c.tooltip(tip.as_str()); }
-                    if let Some(ref icon) = desc.icon { c = c.icon(icon); }
+                    if let Some(ref tip) = desc.tooltip {
+                        c = c.tooltip(tip.as_str());
+                    }
+                    if let Some(ref icon) = desc.icon {
+                        c = c.icon(icon);
+                    }
                     $builder.color_opts(&desc.label, c)
                 } else {
                     $builder.color(&desc.label, default)
                 }
             }
             FieldControlKind::Select { options } => {
-                let default = resource.read_field(&desc.field_name)
+                let default = resource
+                    .read_field(&desc.field_name)
                     .and_then(|v| match v {
                         PaneValue::Int(i) => Some(i as usize),
                         PaneValue::Float(f) => Some(f as usize),
@@ -268,16 +329,18 @@ macro_rules! add_field {
                 let opts: Vec<&str> = options.iter().map(|s| s.as_str()).collect();
                 if desc.tooltip.is_some() || desc.icon.is_some() {
                     let mut s = params::SelectMenu::new(&opts, default);
-                    if let Some(ref tip) = desc.tooltip { s = s.tooltip(tip.as_str()); }
-                    if let Some(ref icon) = desc.icon { s = s.icon(icon); }
+                    if let Some(ref tip) = desc.tooltip {
+                        s = s.tooltip(tip.as_str());
+                    }
+                    if let Some(ref icon) = desc.icon {
+                        s = s.icon(icon);
+                    }
                     $builder.select_opts(&desc.label, s)
                 } else {
                     $builder.select(&desc.label, &opts, default)
                 }
             }
-            FieldControlKind::Monitor => {
-                $builder.monitor(&desc.label, params::Monitor::text(""))
-            }
+            FieldControlKind::Monitor => $builder.monitor(&desc.label, params::Monitor::text("")),
             FieldControlKind::Custom { control_id, config } => {
                 let mut ctrl_config = crate::registry::ControlConfig::new();
                 for (key, val) in config {
@@ -328,19 +391,41 @@ fn sync_resource_to_pane<T: PaneDerive>(
     mut q_numbers: Query<&mut NumberControl, (Without<SliderControl>, Without<ToggleControl>)>,
     mut q_texts: Query<
         &mut TextControl,
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+        ),
     >,
     mut q_selects: Query<
         &mut SelectControl,
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+        ),
     >,
     mut q_colors: Query<
         &mut ColorControl,
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>, Without<SelectControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+            Without<SelectControl>,
+        ),
     >,
     mut q_monitors: Query<
         &mut MonitorControl,
-        (Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>, Without<SelectControl>, Without<ColorControl>),
+        (
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+            Without<SelectControl>,
+            Without<ColorControl>,
+        ),
     >,
     mut commands: Commands,
 ) {
@@ -373,7 +458,9 @@ fn sync_resource_to_pane<T: PaneDerive>(
                 if let Ok((mut ctrl, link)) = q_sliders.get_mut(control_entity) {
                     if (ctrl.value as f32 - *v as f32).abs() > f32::EPSILON {
                         ctrl.value = *v;
-                        commands.entity(link.0).insert(bevy_ui_widgets::SliderValue(*v as f32));
+                        commands
+                            .entity(link.0)
+                            .insert(bevy_ui_widgets::SliderValue(*v as f32));
                     }
                 }
             }
@@ -435,19 +522,41 @@ fn sync_pane_to_resource<T: PaneDerive>(
     q_toggles: Query<&ToggleControl, (Changed<ToggleControl>, Without<SliderControl>)>,
     q_numbers: Query<
         &NumberControl,
-        (Changed<NumberControl>, Without<SliderControl>, Without<ToggleControl>),
+        (
+            Changed<NumberControl>,
+            Without<SliderControl>,
+            Without<ToggleControl>,
+        ),
     >,
     q_texts: Query<
         &TextControl,
-        (Changed<TextControl>, Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>),
+        (
+            Changed<TextControl>,
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+        ),
     >,
     q_selects: Query<
         &SelectControl,
-        (Changed<SelectControl>, Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>),
+        (
+            Changed<SelectControl>,
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+        ),
     >,
     q_colors: Query<
         &ColorControl,
-        (Changed<ColorControl>, Without<SliderControl>, Without<ToggleControl>, Without<NumberControl>, Without<TextControl>, Without<SelectControl>),
+        (
+            Changed<ColorControl>,
+            Without<SliderControl>,
+            Without<ToggleControl>,
+            Without<NumberControl>,
+            Without<TextControl>,
+            Without<SelectControl>,
+        ),
     >,
 ) {
     let title = T::pane_title();
@@ -463,24 +572,30 @@ fn sync_pane_to_resource<T: PaneDerive>(
         };
 
         let value = match &desc.kind {
-            FieldControlKind::Slider { .. } => {
-                q_sliders.get(control_entity).ok().map(|c| PaneValue::Float(c.value))
-            }
-            FieldControlKind::Number { .. } => {
-                q_numbers.get(control_entity).ok().map(|c| PaneValue::Float(c.value))
-            }
-            FieldControlKind::Toggle => {
-                q_toggles.get(control_entity).ok().map(|c| PaneValue::Bool(c.value))
-            }
-            FieldControlKind::Text => {
-                q_texts.get(control_entity).ok().map(|c| PaneValue::String(c.value.clone()))
-            }
-            FieldControlKind::Color => {
-                q_colors.get(control_entity).ok().map(|c| PaneValue::Color(c.value))
-            }
-            FieldControlKind::Select { .. } => {
-                q_selects.get(control_entity).ok().map(|c| PaneValue::Int(c.value as i64))
-            }
+            FieldControlKind::Slider { .. } => q_sliders
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::Float(c.value)),
+            FieldControlKind::Number { .. } => q_numbers
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::Float(c.value)),
+            FieldControlKind::Toggle => q_toggles
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::Bool(c.value)),
+            FieldControlKind::Text => q_texts
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::String(c.value.clone())),
+            FieldControlKind::Color => q_colors
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::Color(c.value)),
+            FieldControlKind::Select { .. } => q_selects
+                .get(control_entity)
+                .ok()
+                .map(|c| PaneValue::Int(c.value as i64)),
             FieldControlKind::Monitor | FieldControlKind::Custom { .. } => None,
         };
 

@@ -70,9 +70,15 @@ fn theme_vars(preset: PaneThemePreset) -> Vec<(&'static str, String)> {
             // Accent fill variants
             ("--pane-accent-fill", "rgba(58, 109, 181, 0.50)".into()),
             ("--pane-accent-fill-hover", "rgba(42, 93, 165, 0.60)".into()),
-            ("--pane-accent-fill-active", "rgba(42, 93, 165, 0.70)".into()),
+            (
+                "--pane-accent-fill-active",
+                "rgba(42, 93, 165, 0.70)".into(),
+            ),
             ("--pane-accent-checked", "rgba(58, 109, 181, 0.20)".into()),
-            ("--pane-accent-checked-hover", "rgba(58, 109, 181, 0.30)".into()),
+            (
+                "--pane-accent-checked-hover",
+                "rgba(58, 109, 181, 0.30)".into(),
+            ),
             ("--pane-accent-indicator", "rgba(58, 109, 181, 0.70)".into()),
             ("--pane-accent-knob", "#3a6db5".into()),
             // Widget backgrounds
@@ -95,10 +101,7 @@ fn theme_vars(preset: PaneThemePreset) -> Vec<(&'static str, String)> {
 /// System: apply theme CSS variable overrides when `PaneTheme` changes.
 pub(crate) fn apply_theme(
     theme: Res<PaneTheme>,
-    mut q_panes: Query<
-        &mut InlineStyle,
-        (With<PaneRoot>, Without<PaneThemeOverride>),
-    >,
+    mut q_panes: Query<&mut InlineStyle, (With<PaneRoot>, Without<PaneThemeOverride>)>,
 ) {
     if !theme.is_changed() {
         return;

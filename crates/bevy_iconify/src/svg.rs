@@ -408,8 +408,7 @@ mod tests {
     #[test]
     fn parse_with_attributes() {
         let input =
-            parse_input(r#""mdi:home", color = "red", width = "24", flip = "horizontal""#)
-                .unwrap();
+            parse_input(r#""mdi:home", color = "red", width = "24", flip = "horizontal""#).unwrap();
         assert_eq!(input.color.as_deref(), Some("red"));
         assert_eq!(input.width.as_deref(), Some("24"));
         assert!(matches!(input.flip, Some(IconifyFlip::Horizontal)));

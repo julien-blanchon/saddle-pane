@@ -137,10 +137,7 @@ fn build_systems(app: &mut App) {
         PostUpdate,
         update_bezier_display.in_set(PaneSystems::Display),
     );
-    app.add_systems(
-        PostUpdate,
-        sync_bezier_to_store.in_set(PaneSystems::Sync),
-    );
+    app.add_systems(PostUpdate, sync_bezier_to_store.in_set(PaneSystems::Sync));
 }
 
 fn bezier_default_value(config: &ControlConfig) -> Option<PaneValue> {
@@ -201,19 +198,40 @@ fn draw_bezier_to_texture(image: &mut Image, ctrl: &BezierControl) {
     let curve_color = Color::linear_rgba(1.0, 1.0, 1.0, 0.94);
 
     // Draw reference diagonal (faint)
-    draw_thick_line(image, w, h,
-        map_x(0.0), map_y(0.0), map_x(1.0), map_y(1.0),
-        ref_color, 1.0,
+    draw_thick_line(
+        image,
+        w,
+        h,
+        map_x(0.0),
+        map_y(0.0),
+        map_x(1.0),
+        map_y(1.0),
+        ref_color,
+        1.0,
     );
 
     // Draw handle lines
-    draw_thick_line(image, w, h,
-        map_x(0.0), map_y(0.0), map_x(ctrl.x1), map_y(ctrl.y1),
-        handle_color, 1.0,
+    draw_thick_line(
+        image,
+        w,
+        h,
+        map_x(0.0),
+        map_y(0.0),
+        map_x(ctrl.x1),
+        map_y(ctrl.y1),
+        handle_color,
+        1.0,
     );
-    draw_thick_line(image, w, h,
-        map_x(ctrl.x2), map_y(ctrl.y2), map_x(1.0), map_y(1.0),
-        handle_color, 1.0,
+    draw_thick_line(
+        image,
+        w,
+        h,
+        map_x(ctrl.x2),
+        map_y(ctrl.y2),
+        map_x(1.0),
+        map_y(1.0),
+        handle_color,
+        1.0,
     );
 
     // Draw the bezier curve — sample densely and draw thick dots
@@ -236,7 +254,12 @@ fn draw_dot(image: &mut Image, w: u32, h: u32, cx: f64, cy: f64, color: Color, r
     let iy_min = (cy as i32 - r_ceil).max(0);
     let iy_max = (cy as i32 + r_ceil).min(h as i32 - 1);
 
-    let LinearRgba { red, green, blue, alpha } = color.to_linear();
+    let LinearRgba {
+        red,
+        green,
+        blue,
+        alpha,
+    } = color.to_linear();
 
     for iy in iy_min..=iy_max {
         for ix in ix_min..=ix_max {
@@ -261,7 +284,17 @@ fn draw_dot(image: &mut Image, w: u32, h: u32, cx: f64, cy: f64, color: Color, r
 }
 
 /// Draw a line made of overlapping dots.
-fn draw_thick_line(image: &mut Image, w: u32, h: u32, x0: f64, y0: f64, x1: f64, y1: f64, color: Color, thickness: f64) {
+fn draw_thick_line(
+    image: &mut Image,
+    w: u32,
+    h: u32,
+    x0: f64,
+    y0: f64,
+    x1: f64,
+    y1: f64,
+    color: Color,
+    thickness: f64,
+) {
     let dx = x1 - x0;
     let dy = y1 - y0;
     let dist = (dx * dx + dy * dy).sqrt();
@@ -381,30 +414,29 @@ fn spawn_bezier_ui(
     row_entity
 }
 
-fn spawn_field(parent: &mut ChildSpawnerCommands, label: &str, value: String, marker: impl Component) {
+fn spawn_field(
+    parent: &mut ChildSpawnerCommands,
+    label: &str,
+    value: String,
+    marker: impl Component,
+) {
     parent
-        .spawn((
-            Node::default(),
-            ClassList::new("pane-bezier-field-group"),
-        ))
+        .spawn((Node::default(), ClassList::new("pane-bezier-field-group")))
         .with_children(|g| {
             g.spawn((
                 Text::new(label),
                 pane_font(9.0),
                 ClassList::new("pane-bezier-field-label"),
             ));
-            g.spawn((
-                Node::default(),
-                ClassList::new("pane-bezier-field-value"),
-            ))
-            .with_children(|v| {
-                v.spawn((
-                    Text::new(value),
-                    pane_font(9.0),
-                    ClassList::new("pane-bezier-field-text"),
-                    marker,
-                ));
-            });
+            g.spawn((Node::default(), ClassList::new("pane-bezier-field-value")))
+                .with_children(|v| {
+                    v.spawn((
+                        Text::new(value),
+                        pane_font(9.0),
+                        ClassList::new("pane-bezier-field-text"),
+                        marker,
+                    ));
+                });
         });
 }
 
@@ -418,7 +450,14 @@ fn on_cp1_drag(
     q_computed: Query<&ComputedNode>,
     mut q_row: Query<&mut BezierControl>,
 ) {
-    handle_cp_drag(ev.entity, ev.event().delta, true, &q_parent, &q_computed, &mut q_row);
+    handle_cp_drag(
+        ev.entity,
+        ev.event().delta,
+        true,
+        &q_parent,
+        &q_computed,
+        &mut q_row,
+    );
 }
 
 fn on_cp2_drag(
@@ -427,7 +466,14 @@ fn on_cp2_drag(
     q_computed: Query<&ComputedNode>,
     mut q_row: Query<&mut BezierControl>,
 ) {
-    handle_cp_drag(ev.entity, ev.event().delta, false, &q_parent, &q_computed, &mut q_row);
+    handle_cp_drag(
+        ev.entity,
+        ev.event().delta,
+        false,
+        &q_parent,
+        &q_computed,
+        &mut q_row,
+    );
 }
 
 fn handle_cp_drag(
@@ -439,16 +485,26 @@ fn handle_cp_drag(
     q_row: &mut Query<&mut BezierControl>,
 ) {
     // cp -> canvas -> row
-    let Ok(canvas_of) = q_parent.get(entity) else { return };
+    let Ok(canvas_of) = q_parent.get(entity) else {
+        return;
+    };
     let canvas = canvas_of.parent();
-    let Ok(canvas_node) = q_computed.get(canvas) else { return };
+    let Ok(canvas_node) = q_computed.get(canvas) else {
+        return;
+    };
     let w = canvas_node.size().x;
     let h = canvas_node.size().y;
-    if w < 1.0 || h < 1.0 { return; }
+    if w < 1.0 || h < 1.0 {
+        return;
+    }
 
-    let Ok(row_of) = q_parent.get(canvas) else { return };
+    let Ok(row_of) = q_parent.get(canvas) else {
+        return;
+    };
     let row = row_of.parent();
-    let Ok(mut ctrl) = q_row.get_mut(row) else { return };
+    let Ok(mut ctrl) = q_row.get_mut(row) else {
+        return;
+    };
 
     let dx = delta.x as f64 / w as f64;
     let dy = -(delta.y as f64 / h as f64);
@@ -468,9 +524,15 @@ fn on_preset_cycle(
     mut q_row: Query<(&mut BezierControl, &mut BezierPresetIndex)>,
 ) {
     // btn -> header -> row
-    let Some(header) = q_parent.get(ev.entity).ok().map(|c| c.parent()) else { return };
-    let Some(row) = q_parent.get(header).ok().map(|c| c.parent()) else { return };
-    let Ok((mut ctrl, mut idx)) = q_row.get_mut(row) else { return };
+    let Some(header) = q_parent.get(ev.entity).ok().map(|c| c.parent()) else {
+        return;
+    };
+    let Some(row) = q_parent.get(header).ok().map(|c| c.parent()) else {
+        return;
+    };
+    let Ok((mut ctrl, mut idx)) = q_row.get_mut(row) else {
+        return;
+    };
 
     idx.0 = (idx.0 + 1) % PRESETS.len();
     let preset = &PRESETS[idx.0];
@@ -517,11 +579,52 @@ fn update_bezier_display(
     mut q_tex_needs_init: Query<&mut BezierTexHandle, Without<ImageNode>>,
     mut q_cp1: Query<&mut InlineStyle, (With<BezierCP1>, Without<BezierCP2>)>,
     mut q_cp2: Query<&mut InlineStyle, (With<BezierCP2>, Without<BezierCP1>)>,
-    mut q_x1: Query<&mut Text, (With<BezierX1Text>, Without<BezierY1Text>, Without<BezierX2Text>, Without<BezierY2Text>)>,
-    mut q_y1: Query<&mut Text, (With<BezierY1Text>, Without<BezierX1Text>, Without<BezierX2Text>, Without<BezierY2Text>)>,
-    mut q_x2: Query<&mut Text, (With<BezierX2Text>, Without<BezierX1Text>, Without<BezierY1Text>, Without<BezierY2Text>)>,
-    mut q_y2: Query<&mut Text, (With<BezierY2Text>, Without<BezierX1Text>, Without<BezierY1Text>, Without<BezierX2Text>)>,
-    mut q_preset: Query<&mut Text, (With<BezierPresetText>, Without<BezierX1Text>, Without<BezierY1Text>, Without<BezierX2Text>, Without<BezierY2Text>)>,
+    mut q_x1: Query<
+        &mut Text,
+        (
+            With<BezierX1Text>,
+            Without<BezierY1Text>,
+            Without<BezierX2Text>,
+            Without<BezierY2Text>,
+        ),
+    >,
+    mut q_y1: Query<
+        &mut Text,
+        (
+            With<BezierY1Text>,
+            Without<BezierX1Text>,
+            Without<BezierX2Text>,
+            Without<BezierY2Text>,
+        ),
+    >,
+    mut q_x2: Query<
+        &mut Text,
+        (
+            With<BezierX2Text>,
+            Without<BezierX1Text>,
+            Without<BezierY1Text>,
+            Without<BezierY2Text>,
+        ),
+    >,
+    mut q_y2: Query<
+        &mut Text,
+        (
+            With<BezierY2Text>,
+            Without<BezierX1Text>,
+            Without<BezierY1Text>,
+            Without<BezierX2Text>,
+        ),
+    >,
+    mut q_preset: Query<
+        &mut Text,
+        (
+            With<BezierPresetText>,
+            Without<BezierX1Text>,
+            Without<BezierY1Text>,
+            Without<BezierX2Text>,
+            Without<BezierY2Text>,
+        ),
+    >,
     mut images: ResMut<Assets<Image>>,
     mut commands: Commands,
 ) {

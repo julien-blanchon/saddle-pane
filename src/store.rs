@@ -313,7 +313,12 @@ mod persistence {
                 PaneValue::String(s) => Some(Self::String(s.clone())),
                 PaneValue::Color(c) => {
                     let srgba = c.to_srgba();
-                    Some(Self::Color([srgba.red, srgba.green, srgba.blue, srgba.alpha]))
+                    Some(Self::Color([
+                        srgba.red,
+                        srgba.green,
+                        srgba.blue,
+                        srgba.alpha,
+                    ]))
                 }
                 PaneValue::Int(i) => Some(Self::Int(*i)),
                 PaneValue::Custom(_) => None,
@@ -325,9 +330,7 @@ mod persistence {
                 Self::Float(f) => PaneValue::Float(*f),
                 Self::Bool(b) => PaneValue::Bool(*b),
                 Self::String(s) => PaneValue::String(s.clone()),
-                Self::Color([r, g, b, a]) => {
-                    PaneValue::Color(Color::srgba(*r, *g, *b, *a))
-                }
+                Self::Color([r, g, b, a]) => PaneValue::Color(Color::srgba(*r, *g, *b, *a)),
                 Self::Int(i) => PaneValue::Int(*i),
             }
         }

@@ -55,7 +55,12 @@ pub(crate) fn spawn_slider_ui(
             row_entity = row.target_entity();
 
             // Label (width set in Rust for reliable alignment)
-            super::spawn_label_with_icon(row, &meta.label, meta.icon.as_deref(), meta.icon_handle.clone());
+            super::spawn_label_with_icon(
+                row,
+                &meta.label,
+                meta.icon.as_deref(),
+                meta.icon_handle.clone(),
+            );
 
             // Slider widget
             let mut slider_cmd = row.spawn((

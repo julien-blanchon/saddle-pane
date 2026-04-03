@@ -13,8 +13,8 @@ use bevy_flair::prelude::{ClassList, InlineStyle};
 use bevy_flair::style::components::NodeStyleSheet;
 
 use saddle_pane::controls::{PaneControlMeta, PaneValue, css_percent, pane_font, spawn_label};
-use saddle_pane::icons::spawn_pane_icon;
 use saddle_pane::events::PaneChanged;
+use saddle_pane::icons::spawn_pane_icon;
 use saddle_pane::prelude::{PaneControlPlugin, PaneControlRegistry, PaneCustomValue, PaneSystems};
 use saddle_pane::registry::{ControlConfig, CustomValueBox};
 use saddle_pane::store::PaneStore;
@@ -132,18 +132,12 @@ impl Plugin for PaneVector2Plugin {
 }
 
 fn build_systems(app: &mut App) {
-    app.add_systems(
-        Update,
-        (close_pad_on_escape, close_pad_on_click_outside),
-    );
+    app.add_systems(Update, (close_pad_on_escape, close_pad_on_click_outside));
     app.add_systems(
         PostUpdate,
         update_vector2_display.in_set(PaneSystems::Display),
     );
-    app.add_systems(
-        PostUpdate,
-        sync_vector2_to_store.in_set(PaneSystems::Sync),
-    );
+    app.add_systems(PostUpdate, sync_vector2_to_store.in_set(PaneSystems::Sync));
 }
 
 fn vector2_default_value(config: &ControlConfig) -> Option<PaneValue> {
@@ -271,10 +265,7 @@ fn spawn_vector2_ui(
                         .with_children(|fields| {
                             // X field
                             fields
-                                .spawn((
-                                    Node::default(),
-                                    ClassList::new("pane-vec2-field-group"),
-                                ))
+                                .spawn((Node::default(), ClassList::new("pane-vec2-field-group")))
                                 .with_children(|g| {
                                     g.spawn((
                                         Text::new("X"),
@@ -297,10 +288,7 @@ fn spawn_vector2_ui(
 
                             // Y field
                             fields
-                                .spawn((
-                                    Node::default(),
-                                    ClassList::new("pane-vec2-field-group"),
-                                ))
+                                .spawn((Node::default(), ClassList::new("pane-vec2-field-group")))
                                 .with_children(|g| {
                                     g.spawn((
                                         Text::new("Y"),
@@ -427,10 +415,7 @@ fn snap(value: f64, step: f64) -> f64 {
 // Auto-close systems
 // ══════════════════════════════════════════════════════════════════════
 
-fn close_pad_on_escape(
-    keys: Res<ButtonInput<KeyCode>>,
-    mut q: Query<&mut Vector2Control>,
-) {
+fn close_pad_on_escape(keys: Res<ButtonInput<KeyCode>>, mut q: Query<&mut Vector2Control>) {
     if keys.just_pressed(KeyCode::Escape) {
         for mut ctrl in &mut q {
             if ctrl.pad_open {
@@ -576,7 +561,13 @@ pub trait Vector2PaneExt {
     ) -> Self;
 }
 
-fn vec2_config(default: (f64, f64), min_x: f64, max_x: f64, min_y: f64, max_y: f64) -> ControlConfig {
+fn vec2_config(
+    default: (f64, f64),
+    min_x: f64,
+    max_x: f64,
+    min_y: f64,
+    max_y: f64,
+) -> ControlConfig {
     ControlConfig::new()
         .float("default_x", default.0)
         .float("default_y", default.1)
@@ -592,7 +583,11 @@ macro_rules! impl_vec2_ext {
     ($ty:ty) => {
         impl Vector2PaneExt for $ty {
             fn vector2(self, label: &str, default: (f64, f64)) -> Self {
-                self.custom("vector2", label, vec2_config(default, -100.0, 100.0, -100.0, 100.0))
+                self.custom(
+                    "vector2",
+                    label,
+                    vec2_config(default, -100.0, 100.0, -100.0, 100.0),
+                )
             }
             fn vector2_bounded(
                 self,
@@ -601,11 +596,17 @@ macro_rules! impl_vec2_ext {
                 y_range: std::ops::RangeInclusive<f64>,
                 default: (f64, f64),
             ) -> Self {
-                self.custom("vector2", label, vec2_config(
-                    default,
-                    *x_range.start(), *x_range.end(),
-                    *y_range.start(), *y_range.end(),
-                ))
+                self.custom(
+                    "vector2",
+                    label,
+                    vec2_config(
+                        default,
+                        *x_range.start(),
+                        *x_range.end(),
+                        *y_range.start(),
+                        *y_range.end(),
+                    ),
+                )
             }
         }
     };

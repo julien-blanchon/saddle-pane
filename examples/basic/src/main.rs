@@ -12,7 +12,13 @@ use saddle_pane_example_common as common;
 #[derive(Resource, Default, Pane)]
 #[pane(title = "Game Settings")]
 struct Settings {
-    #[pane(slider, min = 0.0, max = 20.0, step = 0.1, tooltip = "Movement speed in units/sec")]
+    #[pane(
+        slider,
+        min = 0.0,
+        max = 20.0,
+        step = 0.1,
+        tooltip = "Movement speed in units/sec"
+    )]
     speed: f32,
 
     #[pane(slider, min = 0.0, max = 1.0, step = 0.01)]

@@ -81,13 +81,19 @@ pub(crate) fn spawn_toggle_ui(
 }
 
 /// System: sync Checked component → ToggleControl.
+///
+/// We cannot use `Changed<Checked>` here because `Checked` is a marker
+/// component — removing it does not trigger change detection.  Instead we
+/// poll every frame and only mutate when the state actually differs.
 pub(crate) fn sync_toggle_to_control(
     mut q_links: Query<(&ToggleWidgetLink, &mut ToggleControl)>,
-    q_checked: Query<Has<Checked>, Changed<Checked>>,
+    q_checked: Query<Has<Checked>>,
 ) {
     for (link, mut control) in q_links.iter_mut() {
         if let Ok(is_checked) = q_checked.get(link.0) {
-            control.value = is_checked;
+            if control.value != is_checked {
+                control.value = is_checked;
+            }
         }
     }
 }

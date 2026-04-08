@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use crate::controls::PaneValue;
 use crate::store::{FromPaneValue, IntoPaneValue};
 
-/// A typed key for accessing a value in [`PaneStore`](crate::store::PaneStore).
+/// A typed key for accessing a value in [`PaneStore`].
 ///
 /// Provides compile-time type safety — you can't accidentally read a `f64`
 /// handle as a `bool`.

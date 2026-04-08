@@ -1,3 +1,5 @@
+#![allow(clippy::collapsible_if)]
+
 //! SVG-to-Image rasterization for Bevy, using usvg + tiny-skia.
 //!
 //! This is the **image backend** for [`bevy_iconify`]. It rasterizes SVG strings
@@ -105,36 +107,36 @@ fn render_nodes(
 fn render_path(path: &usvg::Path, transform: tiny_skia::Transform, pixmap: &mut tiny_skia::Pixmap) {
     let data = path.data();
 
-    if let Some(fill) = path.fill() {
-        if let Some(paint) = solid_paint(fill.paint(), fill.opacity()) {
-            let rule = match fill.rule() {
-                usvg::FillRule::NonZero => tiny_skia::FillRule::Winding,
-                usvg::FillRule::EvenOdd => tiny_skia::FillRule::EvenOdd,
-            };
-            pixmap.fill_path(data, &paint, rule, transform, None);
-        }
+    if let Some(fill) = path.fill()
+        && let Some(paint) = solid_paint(fill.paint(), fill.opacity())
+    {
+        let rule = match fill.rule() {
+            usvg::FillRule::NonZero => tiny_skia::FillRule::Winding,
+            usvg::FillRule::EvenOdd => tiny_skia::FillRule::EvenOdd,
+        };
+        pixmap.fill_path(data, &paint, rule, transform, None);
     }
 
-    if let Some(stroke) = path.stroke() {
-        if let Some(paint) = solid_paint(stroke.paint(), stroke.opacity()) {
-            let sk_stroke = tiny_skia::Stroke {
-                width: stroke.width().get(),
-                line_cap: match stroke.linecap() {
-                    usvg::LineCap::Butt => tiny_skia::LineCap::Butt,
-                    usvg::LineCap::Round => tiny_skia::LineCap::Round,
-                    usvg::LineCap::Square => tiny_skia::LineCap::Square,
-                },
-                line_join: match stroke.linejoin() {
-                    usvg::LineJoin::Miter => tiny_skia::LineJoin::Miter,
-                    usvg::LineJoin::MiterClip => tiny_skia::LineJoin::MiterClip,
-                    usvg::LineJoin::Round => tiny_skia::LineJoin::Round,
-                    usvg::LineJoin::Bevel => tiny_skia::LineJoin::Bevel,
-                },
-                miter_limit: stroke.miterlimit().get(),
-                ..tiny_skia::Stroke::default()
-            };
-            pixmap.stroke_path(data, &paint, &sk_stroke, transform, None);
-        }
+    if let Some(stroke) = path.stroke()
+        && let Some(paint) = solid_paint(stroke.paint(), stroke.opacity())
+    {
+        let sk_stroke = tiny_skia::Stroke {
+            width: stroke.width().get(),
+            line_cap: match stroke.linecap() {
+                usvg::LineCap::Butt => tiny_skia::LineCap::Butt,
+                usvg::LineCap::Round => tiny_skia::LineCap::Round,
+                usvg::LineCap::Square => tiny_skia::LineCap::Square,
+            },
+            line_join: match stroke.linejoin() {
+                usvg::LineJoin::Miter => tiny_skia::LineJoin::Miter,
+                usvg::LineJoin::MiterClip => tiny_skia::LineJoin::MiterClip,
+                usvg::LineJoin::Round => tiny_skia::LineJoin::Round,
+                usvg::LineJoin::Bevel => tiny_skia::LineJoin::Bevel,
+            },
+            miter_limit: stroke.miterlimit().get(),
+            ..tiny_skia::Stroke::default()
+        };
+        pixmap.stroke_path(data, &paint, &sk_stroke, transform, None);
     }
 }
 

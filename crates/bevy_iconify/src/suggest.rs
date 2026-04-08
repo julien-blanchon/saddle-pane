@@ -134,7 +134,7 @@ pub(crate) fn suggest_error_message(pack: &str, name: &str, url: &str, api_url: 
         if !matches.is_empty() || !subs.is_empty() {
             msg.push_str("\n\nDid you mean:");
             let mut shown = HashSet::new();
-            for icon in matches.iter().chain(subs.iter().map(|s| *s)).take(5) {
+            for icon in matches.iter().chain(subs.iter().copied()).take(5) {
                 if shown.insert(icon.clone()) {
                     msg.push_str(&format!("\n  {pack}:{icon}"));
                 }

@@ -1,3 +1,5 @@
+#![allow(clippy::collapsible_if)]
+
 //! # saddle_pane
 //!
 //! Lightweight debug/tweaking panel for Bevy 0.18.
